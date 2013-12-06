@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>tree</title>
+        <!--<link href="tree.css" rel="stylesheet" />-->
+        <style>
+			*{ font-size:14px;}
+			.x-tree{width:300px; margin:20px; border:1px solid #CCC; font-family:Arial,sans-serif; font-size:13px;}
+			.x-tree *{ padding:0; margin:0;}
+			.x-tree h2{ height:20px; font-weight:normal;}
+			.x-tree .x-tree-relation, .x-tree .x-tree-icon{ height:20px; float:left; display:inline;}
+			.x-tree .x-tree-relation{ width:20px; background-image:url("images/relation.gif"); background-position:0 -18px; -webkit-user-select:none;}
+			.x-tree .x-tree-relation .x-tree-expanded{ height:12px; width:12px; display:block; margin:6px 0 0 2px; background-image:url(images/expanded-viewer.gif); background-position: -3px -24px; font-size:13px;}
+			.x-tree .x-tree-icon{height:20px; line-height:20px; padding-left:19px; background-image:url(images/icon-page.gif); background-repeat:no-repeat;background-position:-1px -18px;}
+			.x-tree .x-tree-icon strong{ font-weight:normal; cursor:default;}
+			.x-tree .x-tree-child{ margin-left:20px; background: url(images/relation.gif) -20px 0 repeat-y;}
+			/*.x-tree .x-tree-child:after{ content:"."; display:block; height:0; width:0; visibility:hidden; clear:both;}*/
+			.x-tree .x-tree-last-child{ background:none;}
+			.x-tree .x-tree-leaf-child{/* background:none;*/}
+			.x-tree .x-tree-leaf-child .x-tree-icon{background: url(images/file.gif) 1px 4px no-repeat;}
+			.x-tree .x-tree-leaf-child .x-tree-relation b{ display:none;}
+			.x-tree-hidden .x-tree-child{ display:none;}
+			.x-tree-hidden .x-tree-relation .x-tree-expanded{background-position:-3px -4px}
+			.x-tree-hidden .x-tree-icon{background-position: -1px 2px;}
+		</style>
+        <script src="t.js"></script>
+        <script>
+			var json = [
+				{"id": 1, "pid": -1, "text": "Language"},
+				{"id": 2, "pid": 1, "text": "Java"},
+				{"id": 3, "pid": 2, "text": "String"},
+				{"id": 4, "pid": 1, "text": "PHP"},
+				{"id": 5, "pid": 2, "text": "System"},
+				{"id": 6, "pid": 3, "text": "valueOf"},
+				{"id": 7, "pid": 4, "text": "Array"},
+				{"id": 8, "pid": 3, "text": "indexOf"},
+				{"id": 9, "pid": 1, "text": "Javascript"},
+				{"id": 10, "pid": 9, "text": "Number"},
+				{"id": 11, "pid": 9, "text": "Object"}
+			];
+			function parseData(data, o){
+				var r = [],
+					map = [],
+					len = data.length,
+					i = 0;
+				var key = o && o["idKey"] || "id",
+					parentKey = o && o["pIdKey"] || "pid";
+				for(; i < len; i++){
+					map[data[i][key]] = data[i];	
+				}
+				for(i = 0; i < len; i++){
+					var d = data[i];
+					if(map[d[parentKey]] && d[key] != d[parentKey]){
+						if(!map[d[parentKey]].children)
+							map[d[parentKey]].children = [];
+						map[d[parentKey]].children.push(d);
+					}
+					else
+						r.push(d);
+				}
+				return r;
+			}
+			var data = parseData(json);
+			this.onload = function(){
+				/*var root = new dx.widget.Tree("svg", "div");
+				var a = root.append("g", "p");
+				a.append("rect", "div");
+				document.body.appendChild(root.node);*/
+				/*var t = root.append("Java");
+				t.append("String");
+				var map = t.append("Map");
+				var leaf1 = map.append("put");
+				var j = root.append("Javascript");
+				//map.append("C");
+				t.append("System");
+				//console.log(map.getParent());
+				document.body.appendChild(root[0]);
+				//测试临时赋值
+				root[0].className = "tree";
+				t[0].className = "node";
+				j[0].className = "node";
+				leaf1[0].className = "leaf last-child";*/
+				//console.log(bootstrap);
+				var st = new dx.widget.SmartTree({
+					"model": "<div><strong>{}</strong></div>",
+					"root": {"text": "ROOT", "value": -1},
+					"store": data
+				});
+				/*st.onExpand(function(){
+					console.log("展开中的callback");
+				});*/
+				//tree
+				//后序遍历
+				function back(tree, index){
+					//console.log(tree);
+					for(var i = index, l = tree.children.length; i <= l; i++){
+						if(i == index){
+							for(var j = index + 1; j < tree.children.length; j++){
+								//console.log(tree.children[j].parent);
+								if(tree.children[j].parent == i){
+									console.log(tree.children[j])
+									back(tree, j);
+									
+								}
+							}
+							//console.log(tree.children[i]);
+						}
+					}
+				}
+				//back(m, 1);
+				st.onClick(function(a, b){
+					var context = this;
+					//back(this, b.parent);
+					//console.log(b)
+					if(!context.isLeaf(b)){
+						console.log(a);
+						st.expandTo(this);
+					}
+					else{
+						
+					}
+					document.getElementById("test").innerHTML = a.innerHTML;
+				});
+				//console.log(st.getAllChildren());
+				//st.getLeafCount();
+				//st.getAllChild();//所有子节点，包含叶子节点
+				//st.getAllLeaf();//
+				//st.children();
+				//console.log(root.children)
+				/*var a = Array.prototype.slice.apply(document.getElementsByTagName("h2"));*/
+			};
+		</script>
+    </head>
+    <body>
+    	<div id="tree"></div>
+    	<div id="test" style="position:absolute; right:9px; top:9px;"></div>
+    </body>
+</html>

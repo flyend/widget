@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>二级联动</title>
+        <script src="chainedField.js"></script>
+        <script>
+        	var json = [
+				{"id": 1, "pid": -1, "value": "Language"},
+				{"id": 2, "pid": 1, "value": "Java"},
+				{"id": 3, "pid": 2, "value": "String"},
+				{"id": 4, "pid": 1, "value": "PHP"},
+				{"id": 5, "pid": 2, "value": "System"},
+				{"id": 6, "pid": 3, "value": "valueOf"},
+				{"id": 7, "pid": 4, "value": "Array"},
+				{"id": 8, "pid": 3, "value": "indexOf"},
+				{"id": 9, "pid": 1, "value": "Javascript"},
+				{"id": 10, "pid": 9, "value": "Number"},
+				{"id": 11, "pid": 9, "value": "Object"}
+			];
+			function parseData(data, o){
+				var r = [],
+					map = [],
+					len = data.length,
+					i = 0;
+				var key = o && o["idKey"] || "id",
+					parentKey = o && o["pIdKey"] || "pid";
+				for(; i < len; i++){
+					map[data[i][key]] = data[i];	
+				}
+				for(i = 0; i < len; i++){
+					var d = data[i];
+					if(map[d[parentKey]] && d[key] != d[parentKey]){
+						if(!map[d[parentKey]].children)
+							map[d[parentKey]].children = [];
+						map[d[parentKey]].children.push(d);
+					}
+					else
+						r.push(d);
+				}
+				return r;
+			}
+			var data = parseData(json);
+			fd.selectAll(document).ready(function(){
+				var cs = new fd.widget.ChainedSelector({
+					/*"field": document.getElementById("province"),*/
+					"nocache": !1,
+					"store": /*[{
+						"id": -1,
+						"value": "ROOT",
+						"children": [
+							{ "id": 1, "value": "广东", "children": [{"id": 4, "value": "广州"}]},
+							{ "id": 2, "value": "河北"},
+							{ "id": 3, "value": "广西", "children": [{"id": 5, "value": "柳州", "children": [{"id": 8, "value": "柳江"}]}, {"id": 5, "value": "南宁"}, {"id": 5, "value": "桂林"}]}]
+					}],*/ "chainedField.jsp?id={value}",//data
+					"index": 0,
+					"value": 1,
+					"text": "--请选择--"
+				});
+				//cs.selected();
+				/*cs.load({
+					"url": "chainedField.jsp?id={index}&v={value}&t={text}"
+				}).chained(document.getElementById("province"), document.getElementById("city"))*/
+				var a = document.getElementById("city"),
+					b = document.getElementById("area"),
+					c = document.getElementById("c");
+				cs.load({"store": [{"id": 5, "value": "柳州", "children": [{"id": 8, "value": "柳江"}]}, {"id": 5, "value": "南宁"}, {"id": 5, "value": "桂林"}]}).chained(a, b);
+				cs.chained(a, c)
+				fd.selectAll("#btn").bind("click", function(){
+					cs.chained(b, a);
+				});
+				//cs.render();
+			});
+		</script>
+    </head>
+    <body>
+    	<select id="province"><option value="0">-----</option></select>
+    	<select id="city"><option value="0">请选择</option></select>
+    	<select id="area"><option value="0">请选择</option></select>
+    	<select id="c"><option value="0">请选择</option></select>
+    	<button id="btn">ok</button>
+    </body>
+</html>

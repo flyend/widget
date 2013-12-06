@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>tree</title>
+        <link href="tree.css" rel="stylesheet" />
+        <script src="../_$.js"></script>
+        <script src="tree.js"></script>
+    </head>
+    <body>
+    	<div id="mytree"></div>
+        <script>
+			var data = [
+				{"text": "Java", "id": 1, pid: 0},
+				{"text": "PHP", "id": 2, pid: 0},
+				{"text": "String", "id": 11, pid: 1},
+				{"text": "__contractor", "id": 3, pid: 2},
+				{"text": "C++", "id": 4, pid: 0},
+				{"text": "valueOf", "id": 645465464647867867867486746767645647774647674647647676204545, pid: 11}
+			];
+			var json = [
+				{"id": 1, "text": "DDDDDD","url": "9", "pid": 0},
+				{"id": 2, "text": "aaaaaaa", "url": "10", "pid": 0},
+				{"id": 3, "text": "bbbbbbbb", "url": "11", "pid": 2},
+				{"id": 4, "text": "ccccccccc", "pid": 2},
+				{"id": 5, "text": "ddddd", "pid": 2},
+				{"id": 6, "text": "eeeeeeeeee", "pid": 7},
+				{"id": 7, "text": "1111111", "pid": 2},
+				{"id": 8, "text": "2222222", "pid": 7},
+				{"id": 9, "text": "3333333", "pid": 10}
+			];
+			function parseData(data, o){
+				var r = [],
+					map = [],
+					len = data.length,
+					i = 0;
+				var key = o["idKey"],
+					parentKey = o["pIdKey"];
+				for(; i < len; i++){
+					map[data[i][key]] = data[i];
+				}
+				for(i = 0; i < len; i++){
+					var d = data[i];
+					if(map[d[parentKey]] && d[key] != d[parentKey]){
+						if(!map[d[parentKey]].children)
+							map[d[parentKey]].children = [];
+						map[d[parentKey]].children.push(d);
+						console.log(map)
+					}
+					else
+						r.push(d);
+				}
+				return r;
+			}
+			var t = parseData(data, {
+				"idKey": "id",
+				"pIdKey": "pid"
+			});
+			//console.log(t);
+			function parseData2(data, o){
+				var r = [],
+					__this = arguments.callee;
+				if(Object.prototype.toString.apply(data) === "[object Array]"){
+					var len = data.length,
+						i = 0,
+						d;
+					for(; i < len; i++){
+						d = data[i];
+						r.push(d);
+						if(d.children){
+							r = r.concat(__this(d.children, o));
+						}	
+					}
+				}
+				else{
+					r.push(data);
+					if(data.children)
+						r = r.concat(__this(data.children, o));
+				}
+				return r;
+			}
+			var t2 = parseData2(t);
+			console.log(t2);
+			new _$.Tree().root("ROOT", -1).makeTree(t).appendTo(document.getElementById("mytree")).bind("click");
+			
+			function a(){
+				this.x = 9;	
+			}
+			function b(){
+				
+			}
+			console.log(b.constractor);
+			b.prototype = new a();
+			b.prototype.constractor = a;
+			console.log(new b())
+		</script>
+    </body>
+</html>
