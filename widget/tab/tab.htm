@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>tab</title>
+        <!--<link href="../SyntaxHighlighter.css" rel="stylesheet" />-->
+        <link href="tab.css" rel="stylesheet" />
+        <style>
+			.dp-highlighter{ margin-top: 0 !important;}
+			.container, .description{ border:2px solid #EEE; margin-left:10px;}
+			#tabPanel{ position:relative;width: 500px;}
+			#createTab{ position:absolute; right:10px; top:-30px; width:56px; height:26px; line-height:26px; text-align:center; color:#FFF; border-radius:4px; text-decoration:none; background-color:#4d90fe; font-size:16px; font-weight:bold; z-index:9999;}
+		</style>
+        <script src="../$.js"></script>
+        <script src="tab.js"></script>
+        <!--<script src="../SyntaxHighlighter.js"></script>-->
+        
+        <script>
+			_$(document).ready(function(){
+				var tab = new _$.widget.Tab({
+					"nav": [{"name": "Home", "panel": "app/a.html"},{"name": "Chromium", "panel": "data:text/html,<html contenteditable><meta charset='utf-8'/><h1>编辑器<h1>"}],
+					/*"activeTab": 1*/
+					"createTab": true
+				}).appendTo(_$("#tabPanel")[0]);
+				_$("#createTab")[0].onclick = function(e){
+					e.stopPropagation();
+					var o = {
+						"name": "tab " + tab.getTabLength(),
+						"panel": "data:text/html,<htm><h2>" + tab.getTabLength() + "</h2>",
+						"closable": true
+					};
+					/*if(this.textContent == "Kitchen Sink"){
+						o["handler"] = function(a){
+							//console.log(a);
+						};
+						o["panel"] = (function(){ var a = document.createElement("div"); a.className = "x-loading"; return a;})();
+						o["loaded"] = function(a){
+							setTimeout(function(){
+								_$.ajax("table.php",function(res){
+									//var data = $.parseJSON(res);
+									a.panel.innerHTML = res;
+								});
+							},2000);
+							
+						};
+					}*/
+					tab.addTab(o);
+					return false;
+				};
+				//dp.SyntaxHighlighter.HighlightAll('code');
+			});
+		</script>
+    </head>
+    <body>
+        <div class="description">
+        	<h3>按顺序导入</h3>
+        	<ul>
+            	<li>tree.css</li>
+            	<li>_$.js脚本</li>
+                <li>tree.js脚本</li>
+            </ul>
+        </div>
+    	<div class="container">
+        	<h2>普通列表</h2>
+            <div id="tabPanel"><a id="createTab" href="javascript:void(0);">+</a></div>
+            <div class="section">
+                <code>
+                <textarea readonly="readonly" name="code" class="jscript">
+                    var options=new _$.Options("simple");//创建普通树，默认为普通树
+                    options.appendTo(node);//添加到node对象中，node为dom节点
+                    options.bind("click","../tree/tree.jsp?id=3",fn);//绑定单击事件，传递json格式，符合["one","two"]，fn为回调函数
+                    options.doClickSpace();//点击空白处取消
+                </textarea>
+                </code>
+            </div>
+        </div>
+        <!--<iframe id="ajaxHistory" width="600"></iframe>-->
+    </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>Picture identification</title>
+        <link href="picture.css" rel="stylesheet" />
+        <style>
+			body{ padding:0; margin:0;}
+            .x-picture-crop{background-color:#000;}
+            #preview{ width:100px; height:100px; position:absolute; left:715px; top:100px; overflow:hidden;}
+            #preview img{width:602px; height:400px;}
+		</style>
+        <script src="picture.js"></script>
+        <script>
+			window.onload = function(){
+				var pic = new fd.widget.SmartPicture(/*"http://code.ciaoca.com/jquery/jcrop/demo/demos/demo_files/sago.jpg"*/document.getElementById("picture"));
+				/*pic.identity({
+					"tags": [{"x":80, "y": 50, "width": 80, "height": 70, "text": "beijing"}, {"x":180, "y": 150, "width": 50, "height": 50, "text": "tianjin"}]
+				});*/
+                var preview = document.getElementById("preview").getElementsByTagName("img")[0];
+                pic.crop({
+                    "select": [50, 100, 20, 20],
+                    "range": [100, 100],
+                    "preview": function(x, y, w, h){
+                        preview.style.marginLeft = x + "px";
+                        preview.style.marginTop = y + "px";
+                        preview.style.width = w + "px";
+                        preview.style.height = h + "px";
+                    }
+                });
+				document.getElementById("add").onclick = function(){
+					pic.addIdentity({
+						"element": (function(){
+							var div = document.createElement("div"),
+								ta = document.createElement("textarea"),
+								ok = document.createElement("input");
+							ok.type = "button";
+							ok.value = "OK";
+							ta.onclick = function(){
+								this.focus();
+							};
+							ok.onclick = function(){
+								pic.addTag(document.createTextNode(ta.value));
+								pic.close();
+							};
+							div.appendChild(ta);
+							div.appendChild(ok);
+							return div;
+						})()	
+					});
+				};
+			}
+		</script>
+    </head>
+    <body style="height:2000px">
+    	<div class="container" style="margin:20px 60px">
+            <img src="https://www.google.com.hk/logos/doodles/2014/dian-fosseys-82nd-birthday-5702250374627328-hp.jpg" alt="" id="picture" width="450" />
+            <a href="javascript:void(0);" id="add" style="position:absolute;">添加tag</a>
+        </div>
+        <div id="preview"><img src="https://www.google.com.hk/logos/doodles/2014/dian-fosseys-82nd-birthday-5702250374627328-hp.jpg" alt="" /></div>
+    </body>
+</html>

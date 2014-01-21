@@ -1,0 +1,47 @@
+﻿.tree{ -webkit-user-select:none;}
+.tree *{ padding:0; margin:0;}
+.tree dt{ height:20px;}
+.tree .checkbox{ display:none;}
+.tree.multip .checkbox{ display:block;}
+.tree dt div{ float:left; display:inline; height:20px;}
+.tree .node, .tree .leaf{ margin-left:20px; background:url(images/relation.gif) -20px 0 repeat-y;}
+.tree .last-child{ background:none;}
+.tree .expanded{ height:12px; width:12px; margin:6px 0 0 2px; display:block; background-image:url(images/expanded-viewer.gif); background-position:-3px -24px;}
+.tree .relation{ width:20px; background-image:url(images/relation.gif); background-position:0 -18px;}
+.tree .tree-icon{ padding-left:20px; height:20px; line-height:20px; vertical-align:middle; background-image:url(images/icon-page.gif); background-repeat:no-repeat;background-position: -1px -18px;}
+.tree .tree-icon strong{ font-weight:100;}
+.tree .checkbox{ width:16px; height:16px; margin-top:2px; float:left; /*display:inline;*/ background-image:url(images/tree-checkbox-off.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.tree .checkbox.all{ background-image:url(images/tree-checkbox-all.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.tree .checkbox.on{ background-image:url(images/tree-checkbox-on.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.tree .leaf{ height:20px; margin-left:0; /*border:1px solid red*/}
+.tree .leaf .relation{ width:20px;height:20px; float:left; background-image:url(images/relation.gif) ;background-position:0 -18px;}
+.tree .leaf .tree-icon{ float:left; height:17px; padding-top:2px; background:url(images/file.gif) 1px 4px no-repeat;}
+.tree b.loading{ background:url(images/loading.gif) -5px -5px;}
+.tree strong.leaf{ background:none; cursor:pointer;}
+dl.hidden dd{ display:none;}
+dl.hidden .expanded{background-position:-3px -4px}
+dl.hidden .tree-icon{background-position: -1px 2px;}
+
+.x-tree{ -webkit-user-select:none;}
+.x-tree *{ padding:0; margin:0;}
+.x-tree dt{ height:20px;}
+.x-tree .checkbox{ display:none;}
+.x-tree.multip .checkbox{ display:block;}
+.x-tree dt div{ float:left; display:inline; height:20px;}
+.x-tree .node, .x-tree .leaf{ margin-left:20px; background:url(images/relation.gif) -20px 0 repeat-y;}
+.x-tree .last-child{ background:none;}
+.x-tree .expanded{ height:12px; width:12px; margin:6px 0 0 2px; display:block; background-image:url(images/expanded-viewer.gif); background-position:-3px -24px;}
+.x-tree .relation{ width:20px; background-image:url(images/relation.gif); background-position:0 -18px;}
+.x-tree .x-tree-icon{ padding-left:20px; height:20px; line-height:20px; vertical-align:middle; background-image:url(images/icon-page.gif); background-repeat:no-repeat;background-position: -1px -18px;}
+.x-tree .x-tree-icon strong{ font-weight:100;}
+.x-tree .checkbox{ width:16px; height:16px; margin-top:2px; float:left; /*display:inline;*/ background-image:url(images.x-tree-checkbox-off.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.x-tree .checkbox.all{ background-image:url(images.x-tree-checkbox-all.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.x-tree .checkbox.on{ background-image:url(images.x-tree-checkbox-on.gif); background-repeat:no-repeat; background-position:-1px 1px;}
+.x-tree .leaf{ height:20px; margin-left:0; /*border:1px solid red*/}
+.x-tree .leaf .relation{ width:20px;height:20px; float:left; background-image:url(images/relation.gif) ;background-position:0 -18px;}
+.x-tree .leaf .x-tree-icon{ float:left; height:17px; padding-top:2px; background:url(images/file.gif) 1px 4px no-repeat;}
+.x-tree b.loading{ background:url(images/loading.gif) -5px -5px;}
+.x-tree strong.leaf{ background:none; cursor:pointer;}
+dl.hidden dd{ display:none;}
+dl.hidden .expanded{background-position:-3px -4px}
+dl.hidden .x-tree-icon{background-position: -1px 2px;}

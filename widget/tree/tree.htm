@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>tree</title>
+        <link href="../SyntaxHighlighter.css" rel="stylesheet" />
+        <link href="tree.css" rel="stylesheet" />
+        <style>
+			body{font-family:Verdana, Geneva, sans-serif; font-size:12px;}
+			.dp-highlighter{ margin-top: 0 !important;}
+			.container, .description{ border:2px solid #EEE; margin-left:10px;}
+		</style>
+        <script src="../_$.js"></script>
+        <script src="tree.js"></script>
+        <script src="../SyntaxHighlighter.js"></script>
+        <script>
+			_$(document).ready(function(){
+				var json=[
+					{text: "树", value: 1, 
+						children: [
+							{text: "普通树", value: 2, children: [{text: "init", value: 3}, {text: "root", value: 0}]},
+							{text: "选择树", value: 2, children: [{text: "init", value: 3}, {text: "root", value: 0}]},
+							{text: "AJAX树", value: 2, children: [{text: "init", value: 3}, {text: "root", value: 0}]}
+						]
+					},
+					{text: "列表", value: 4, children: [{text: "二级", value: 5, children: [{text: "三级", value: 6}]}, {text: "二级", value: 22, children: [{text: "三级", value: 23}]}]}
+				];
+				new _$.Tree().root("普通树",-1).makeTree(json).appendTo(_$("#simpleTree").node).bind("click").expand("id_1");
+				new _$.Tree().root("选择树",-1).makeTree(json).appendTo(_$("#checkboxTree").node).bind("click").isMultiple(function(el,tree){
+					var chk=tree.getElementsByTagName("span"), arr=[];
+					for(var i=0,l=chk.length; i<l; i++){
+						var c=chk[i], attr=c.getAttribute("value");
+						if(_$.hasClass(c,"all") || _$.hasClass(c,"on")){
+							if(attr)
+								arr.push(attr)	
+						}	
+					}
+					alert(arr)
+				});
+				new _$.Tree().root("普通树",-1).makeTree(json).appendTo(_$("#simpleTree").node).bind("click").expand("id_2");
+				var t2=new _$.Tree().root("tree.jsp?id=100","ajax").loadTree("tree.jsp?id=").appendTo(_$("#ajaxTree").node).isMultiple();
+				_$("#clear").node.onclick=function(){
+					t2.clearAll().root("AJAX树",1).loadTree("tree.jsp?id=");
+				};
+				dp.SyntaxHighlighter.HighlightAll('code');
+			});
+		</script>
+    </head>
+    <body>
+    	<div class="description">
+        	<h3>导入</h3>
+        	<ul>
+            	<li>tree.css</li>
+            	<li>_$.js脚本</li>
+                <li>tree.js脚本</li>
+            </ul>
+        </div>
+    	<div class="container">
+        	<h2>普通树</h2>
+            <div id="simpleTree"></div>
+            <div class="section">
+                <code>
+                <textarea readonly="readonly" name="code" class="jscript">
+                    var tree=new _$.Tree();
+                    tree.root("name",-1,"on");//设置根的名字、id及状态，后两个参数可选
+                    tree.makeTree(json);//构建一棵树，参数为json格式，符合[{},{}]
+                    tree.appendTo(node);//在节点中添加，node为html dom
+                    tree.bind(event,fn);//event 为浏览器事件模型，fn为回调函数，可选
+                </textarea>
+                </code>
+            </div>
+        </div>
+        <hr />
+        <div class="container">
+        	<h2>选择树</h2>
+        	<div id="checkboxTree"></div>
+            <div class="section">
+                <code>
+                <textarea readonly="readonly" name="code" class="jscript">
+                    //构建同普通树
+                    tree.isMultiple(fn);//是多选树，fn为回调函数，可选
+                    //获取所有on或all的value（id）
+                    var fn=function(el,tree){
+                    	var chk=tree.getElementsByTagName("span"), arr=[];
+                        for(var i=0,l=chk.length; i<l; i++){
+                            var c=chk[i], attr=c.getAttribute("value");
+                            if(_$.hasClass(c,"all") || _$.hasClass(c,"on")){
+                                if(attr)
+                                    arr.push(attr);
+                            }	
+                        }
+                        console.log(arr)
+                   	}
+                </textarea>
+                </code>
+            </div>
+        </div>
+        <hr />
+        <div class="container">
+        	<h2>AJAX树</h2>
+        	<div id="ajaxTree"></div>
+            <div class="section">
+                <code>
+                <textarea readonly="readonly" name="code" class="jscript">
+                    var tree=new _$.Tree();
+                    tree.root("AJAX树",-1);
+                    tree.loadTree("tree.jsp?id=");//加载xhr，返回格式为json，符合[{},{}];
+                    tree.appendTo(node);
+                    tree.isMultiple(fn);//是多选树，fn为回调函数，可选
+                </textarea>
+                </code>
+            </div>
+        </div>
+         <div style="height:30px; width:80px; background:red" id="clear">clear</div>
+    </body>
+</html>

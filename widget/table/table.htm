@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>table</title>
+        <link href="table.css" rel="stylesheet" />
+        <script src="../pagination/pagination.js"></script>
+        <script src="table.js"></script>
+        <script>
+            var json = [
+                {"id": 1, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 2, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 3, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 4, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 5, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 5, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 6, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 7, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 8, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 9, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 10, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 11, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"},
+                {"id": 12, "title": "罗非鱼", "author": "李四", "content": "A", "since": "芳芳", "datetime": "2011-11-11 20:24:24"}
+            ]
+			window.onload = function(){
+				var table = new fd.widget.SmartTable({
+                    "table": document.getElementById("list"),
+                    "title": {
+                        "id": {"text": "ID", "tpl": "<input type='checkbox' />{id}", "attr": {}, "field": ["p", "o"]},
+                        "name": {"text": "标题", "tpl": "<a href='#'>{name}</a>", "attr": {}, "field": ["y", "p", "author", "name"]},
+                        "author": {"text": "发布者"}
+                    },
+                    "store": "table.jsp",
+                    "column": 8,
+                    "mapping": "data",
+                    "query": {
+                        "page": 1,//json.slice(0, 8),
+                        "rnd": new Date().getTime()
+                    },
+                    "nocache": true,
+                    "tpl": {
+                        
+                        //"title": {"html": "<p><i>{id}</i>. <a href='#'>{title}</a></p>", "filter": function(){}},
+                        "author": "<i>{author}</i>",
+                        "name": "<p style='color:red'>{name}</p>",
+                        "id": "<input type='checkbox' />{id}"
+                    }
+                }).ready(function(data){
+                    //console.log(data)
+                    new fd.widget.Pagination({
+                        "length": 36
+                    })
+                    .onFirst(document.getElementById("first"), function(){
+                        table.reset().reload({
+                            "store": "table.jsp",
+                            "query": {
+                                "page": 1,
+                                "rnd": new Date().getTime()
+                            }
+                        });
+                        console.log(this)
+                    })
+                    .onLast()
+                    .fromTo(2, 8)
+                    .onNext()
+                    .onPrev();
+                });
+                /*table.addRow().addCell("1").addCell("flyend").addCell("等你").addCell("A", function(){
+                    this.colSpan = "3";
+                });
+                table.addRow([2, "jay", "张三", "B"], "<td><b style='color:red'>{1}</b></td><td><s>{2}</s></td>");//.addCell("2").addCell("jay").addCell("张三").addCell("B", "<input type='checkbox'>{s}");
+                table.addRow({"id": 3, "lang": "Java", "class": "System"}, "<td><input type='checkbox' />{id}</td><td><a href='#'>{class}</a></td>");
+                table.addRow({"id": 4, "sum": "汇总", "person": 2510, "avg": 4200}, "<td style='background:red' colspan='3'><p><b><i style='color:#fff'>{sum}</i></b></p></td><td><h2>{avg}</h2></td>").addCell("done");*/
+                /*table.setTitle("编号", tpl, function(){
+                });*/
+                //table.setTemplate();
+                var page = 1;
+                document.getElementById("refresh").onclick = function(){
+                    //console.log(json.slice((page) * 8, (++page) * 8))
+                    table.reset().reload({
+                        "store": "table.jsp",
+                        "query": {
+                            "page": ++page, //json.slice((page) * 8, (++page) * 8),//++page,
+                            "rnd": new Date().getTime()
+                        }
+                    }).ready(function(data){
+                        //console.log(data)
+                    });
+                };
+			};
+		</script>
+    </head>
+    <body>
+        <div class="section">
+                <div class="section_head">
+                    <h3>信用等级设置记录</h3>
+                </div>
+                <div class="group_option">
+                    <form action="this.html">
+                    <fieldset>
+                    <legend>筛选客户表单</legend>
+                    <span class="block_field">
+                    <label for="reg_time_start">设置时间</label>
+                    <input type="date" class="input_txt" name="reg_time[]" id="reg_time_start">
+                    <label for="reg_time_end">至</label>
+                    <input type="date" class="input_txt" name="reg_time[]" id="reg_time_end">
+                    </span>
+                    <span class="block_field">
+                    <input type="text" class="input_txt" name="query" id="query" title="用户名/真实姓名" placeholder="输入用户名/真实姓名"> 
+                    <button type="submit" class="btn">搜索</button>
+                    </span>
+                    </fieldset>
+                    </form>
+                </div>
+                <div class="box_tbl">
+                    <table class="tbl_lst" id="list">
+                    <caption>客户信用等级记录列表</caption>
+                    <thead>
+                    <tr>
+                    <th scope="col">设置ID</th>
+                    <th scope="col">用户名</th>
+                    <th scope="col">真实姓名</th>
+                    <th scope="col">信用等级</th>
+                    <th scope="col">操作人</th>
+                    <th scope="col">操作时间</th>
+                    <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>A</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="hxd_1customer_101_detail.html" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>B</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>C</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>A</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>B</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>C</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>A</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>B</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看</a></td>
+                    </tr>
+                    <tr>
+                    <td>1234</td>
+                    <td>罗非鱼</td>
+                    <td>李坑爹</td>
+                    <td>C</td>
+                    <td>芳芳</td>
+                    <td>2011-11-11 20:24:24</td>
+                    <td><a href="#" class="btn">查看2</a></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="section_bottom">
+                    <div class="btns">
+                        <button type="button" class="ico_btn btn_excel"><span class="sp"></span>导出列表</button>
+                        <button type="button" class="ico_btn btn_refresh" id="refresh"><span class="sp"></span>刷新数据</button>
+                    </div>
+                    <div class="paginate">
+                        <p class="c_page"><span>当前<em>1</em>/14</span> <span>共166条</span></p>
+                        <!-- [D] 激活状态
+                        <a href="#"><span title="首页" class="pre_end_on">首页</span></a>
+                        <a href="#"><span title="上一页" class="pre_on">上一页</span></a> -->
+                        <!-- [D] 非激活状态 -->
+                        <a href="#"><span title="首页" class="pre_end" id="first">首页</span></a>
+                        <a href="#"><span title="上一页" class="pre" id="prev">上一页</span></a>
+                        <a href="#"><strong>1</strong></a>
+                        <a href="#"><span>2</span></a>
+                        <a href="#"><span>3</span></a>
+                        <a href="#"><span>4</span></a>
+                        <a href="#"><span>5</span></a>
+                        <a href="#"><span>6</span></a>
+                        <a href="#"><span>7</span></a>
+                        <a href="#"><span>8</span></a>
+                        <a href="#"><span>9</span></a>
+                        <a href="#"><span>10</span></a>
+                        <!-- [D] 激活状态 -->
+                        <a href="#"><span title="下一页" class="next_on">下一页</span></a>
+                        <a href="#"><span title="尾页" class="next_end_on">尾页</span></a>
+                        <!-- [D] 非激活状态
+                        <a href="#"><span title="下一页" class="next">下一页</span></a>
+                        <a href="#"><span title="尾页" class="next_end">尾页</span></a> -->
+                        <form action="this.html">
+                        <fieldset class="group_form">
+                        <legend>跳转页面表单</legend>
+                        <input type="number" name="page" id="page" class="input_txt" title="页数">
+                        <button type="submit" class="btn">跳转</button>
+                        </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </body>
+</html>

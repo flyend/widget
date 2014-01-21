@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>form</title>
+        <link rel="stylesheet" type="text/css" href="form.css" />
+        <script src="form.js"></script>
+        <script>
+            var CONFIG = {
+                "LOGIN": {
+                    "user": {
+                        "name": "user",
+                        "id": "#user",
+                        "required": {"message": "用户名不能为空！"}
+                    },
+                    "password": {
+                        "name": "password",
+                        "id": "#password",
+                        "required": {"message": "密码不能为空！"},
+                        "minlength": {"value": 6, "message": "密码不能小于6位"},
+                        "strength": {"message": "密码必须包含字母、数字和特殊字符！"}
+                    },
+                    "checkcode": {
+                        "name": "checkcode",
+                        "id": "#checkcode",
+                        "required": {"message": "验证码不能为空！"},
+                        "code": {"message": "验证码输入错误！"}
+                    },
+                    "callback": function(msg){
+                        var err = fd.selectAll("#error");
+                        err.addClass("show");
+                        err[0].innerHTML = msg;
+                        this.focus();
+                    }
+                }
+            };
+            var login = CONFIG.LOGIN;
+            fd.selectAll(document).ready(function(){
+                var form = new fd.widget.SmartForm({
+                    "form": fd.selectAll("#myform")[0]
+                }).submit(fd.selectAll("#login")[0], function(){
+                    form.validate(fd.selectAll(login["user"]["id"])[0], {
+                        "required": function(bool){
+                            if(!bool){
+                                login.callback.call(this, login["user"]["required"]["message"]);                                
+                            }
+                            return bool;
+                        }
+                    }).validate(fd.selectAll(login["password"]["id"])[0], {
+                        "required": function(bool){
+                            if(!bool){
+                                login.callback.call(this, login["password"]["required"]["message"]);                                
+                            }
+                            return bool;
+                        }
+                    }).validate(fd.selectAll(login["password"]["id"])[0], {
+                        "minlength": function(length){
+                            //alert(3);
+                            var bool = length > login["password"]["minlength"]["value"];
+                            if(!bool){
+                                login.callback.call(this, login["password"]["minlength"]["message"]);
+                            }
+                            return bool;
+                        }
+                    }).validate(fd.selectAll(login["password"]["id"])[0], {
+                        "strength": function(bool){
+                            if(!bool){
+                                login.callback.call(this, login["password"]["strength"]["message"]);
+                            }
+                            return bool;
+                        }
+                    }).validate(fd.selectAll(login["checkcode"]["id"])[0], {
+                        "required": function(bool){
+                            if(!bool){
+                                login.callback.call(this, login["checkcode"]["required"]["message"]);                                
+                            }
+                            return bool;
+                        }
+                    }).validate(fd.selectAll(login["checkcode"]["id"])[0], function(){
+                        //自定义验证，true：通过，false：不通过
+                        return /3fun/i.test(this.value);
+                    }, function(bool){
+                        if(!bool){
+                            login.callback.call(this, login["checkcode"]["code"]["message"]);                                
+                        }
+                        else{
+                            //所有验证通过
+                            fd.selectAll("#error")[0].innerHTML = "验证成功！";
+                        }
+                        //最后一个规则
+                        return bool;
+                    });
+                }).listener(fd.selectAll(login["user"]["id"])[0], {
+                    "onKeyup": function(){
+                        var ph = fd.selectAll("#uPlaceholder");
+                        if(this.value.length){
+                            ph.addClass("hidden");
+                        }
+                        else{
+                            ph.removeClass("hidden");
+                        }
+                    },
+                    "onBlur": function(){
+                        if(/flyend/i.test(this.value)){
+                            login.callback.call(this, "用户名已存在！");  
+                        }
+                    }
+                }).listener(fd.selectAll(login["checkcode"]["id"])[0], {
+                    "onKeyup": function(){
+                        var ph = fd.selectAll("#mPlaceholder"),
+                            pass = fd.selectAll("#checkpass");
+                        if(this.value.length){
+                            ph.addClass("hidden");
+                            if(this.value.length >= 4){
+                                pass.addClass("show");
+                                if(/3fun/i.test(this.value)){
+                                    pass.addClass("ok");
+                                    pass[0].innerHTML = "&radic;";
+                                }
+                                else{
+                                    pass.removeClass("ok");
+                                    pass[0].innerHTML = "x";
+                                }
+                            }
+                            else{
+                                pass.removeClass("show");
+                            }
+                        }
+                        else{
+                             ph.removeClass("hidden");
+                        }
+                    }
+                })
+                //其他操作
+                fd.selectAll("#uPlaceholder").bind("click", function(){ fd.selectAll("#user")[0].focus(); });
+                //console.log(fd.selectAll("#uPlaceholder"))
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <form name="login" id="myform">
+                <p id="error"></p>
+                <div class="field">
+                    <label for="user">登录名：</label>
+                    <input type="text" name="user" id="user" />
+                    <span class="placeholder" id="uPlaceholder">手机号/会员名/邮箱</span>
+                    <span class="close">x</span>
+                </div>
+                <div class="field">
+                    <label for="password">登录密码：</label>
+                    <input type="password" name="password" id="password" />
+                </div>
+                <div class="field check">
+                    <input type="text" name="checkcode" id="checkcode" />
+                    <label for="checkcode" class="placeholder" id="mPlaceholder">验证码</label>
+                    <img src="data:image/jpg;base64,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" id="codeimg" alt="3fun" />
+                    <span id="checkpass">&radic;</span>
+                </div>
+                <div class="submit">
+                    <input type="button" name="login" value="登录" id="login" />
+                    <input type="reset" />
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

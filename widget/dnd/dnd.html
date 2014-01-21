@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>dnd</title>
+        <style>*{/*padding:0; margin:0;*/}</style>
+        <script src="dnd.js"></script>
+        <script>            
+            window.onload = function(){
+                new fd.util.Draggable(/*[
+                    {"element": document.getElementById("dialog"), "target": document.getElementById("dialog").getElementsByTagName("div")[0]},
+                    document.getElementById("cal")
+                ]*/document.getElementsByTagName("ul")/*[document.getElementById("cal")]*/).onStart(function(){
+                    //console.log(this)
+                }).onDrag(function(){
+
+                }).onDrop(function(){
+
+                });//.manager()//管理器
+            };
+        </script>
+    </head>
+    <body>
+        <div id="cal" style="width:100px; height:100px; background-color:red; position:absolute; left:8px; top:8px;"></div>
+        <ul class="list-ul" style="width:50px; height:50px; background-color:green; position:absolute; left:228px; top:58px;"></ul>
+        <ul class="list-ul" style="width:50px; height:50px; background-color:blue; position:absolute; left:58px; top:208px;"></ul>
+        <div id="dialog" style="width:300px; height:150px; position:absolute; left:308px; top:80px; border:1px solid #ccc; background-color:#fff;"><div style="background-color:#ccc;height:30px"></div></div>
+    </body>
+</html>

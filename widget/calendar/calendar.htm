@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8" />
+        <title>calendar</title>
+        <link href="../SyntaxHighlighter.css" rel="stylesheet" />
+        <link href="calendar.css" rel="stylesheet" />
+        <style>
+			.dp-highlighter{ margin-top: 0 !important;}
+			.container, .description{ border:2px solid #EEE; margin-left:10px;}
+		</style>
+        <script src="../$.js"></script>
+        <script src="calendar.js"></script>
+        <script src="../SyntaxHighlighter.js"></script>
+        
+        <script>
+			_$(document).ready(function(){
+				//new _$.Calendar({"date": "2012-12-21", "format": "yyyy-mm-dd","css": {"left": this.offsetLeft + "px", "top": this.offsetTop + 30 + "px"}}).appendTo(document.body);
+				var el = _$("#mydate")[0];
+				el.onclick = function(){
+					if(!el.created){
+						el.created = new _$.widget.Calendar({
+							/*"date": el.value || "2012/3/5",*/
+							"format": "yyyy-MM-dd hh:mm:ss",
+							"css": {"left": _$(el).offset().left + "px", "top": _$(el).offset().top + 30 + "px"}
+						}).appendTo(_$("#calendar")[0]).bind("click",function(format,e,self){
+							el.value = format;
+							self.hide();
+						}).doClickSpace(this);
+						_$(el).bind("keyup",function(e){
+							el.created.direction(this,e);
+						});
+					}
+					
+					else{
+						el.created.hide() ? el.created.hide() : el.created.show();
+					}
+				}
+				dp.SyntaxHighlighter.HighlightAll('code');
+			});
+		</script>
+    </head>
+    <body>
+        <div class="description">
+        	<h3>按顺序导入</h3>
+        	<ul>
+            	<li>calendar.css</li>
+            	<li>$.js脚本</li>
+                <li>calendar.js脚本</li>
+            </ul>
+        </div>
+    	<div class="container">
+        	<h2>日历</h2>
+            <div id="calendar"></div>
+            <input type="text" id="mydate" />
+            <div class="section">
+                <code>
+                <textarea readonly="readonly" name="code" class="jscript">
+                    var calendar = new _$.Calendar({"date": "2012-12-21", "format": "yyyy-MM-dd"});//创建日历，date指定日期，默认当前日期，format日历格式
+                    calendar.appendTo(node);//添加到node对象中，node为dom节点
+                    calendar.bind("click",fn);//绑定单击事件，fn回调函数参数format获取的日期，el为单击元素
+                </textarea>
+                </code>
+            </div>
+        </div>
+        <input type="date" />
+    </body>
+</html>
