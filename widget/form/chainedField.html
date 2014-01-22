@@ -3,42 +3,13 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>二级联动</title>
-		<link href="app_css/layout.css" rel="stylesheet" />
-		<link href="app_css/SyntaxHighlighter.css" rel="stylesheet" />
-        <script src="widget/form/chainedField.js"></script>
-        <script src="widget/tree/tree.js"></script>
-        <script src="app_js/SyntaxHighlighter.js"></script>
+		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+        <script src="http://flyend.github.io/widget/widget/tree/tree.js"></script>
+        <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
+        <script src="./chainedField.js"></script>
         <script>
-			//fd.selectAll(document).ready(function(){
 			window.onload = function(){
-				/*[{
-						"id": -1,
-						"value": "ROOT",
-						"children": [
-							{ "id": 1, "value": "广东", "children": [{"id": 4, "value": "广州"}]},
-							{ "id": 2, "value": "河北"},
-							{ "id": 3, "value": "广西", "children": [{"id": 5, "value": "柳州", "children": [{"id": 8, "value": "柳江"}]}, {"id": 5, "value": "南宁"}, {"id": 5, "value": "桂林"}]}]
-					}],*/
-				/*var cs = new fd.widget.ChainedSelector({
-					"nocache": true,
-					"store":  "chainedField.jsp?id={value}",//data
-					"index": 0,
-					"value": 1,
-					"text": "--请选择--"
-				});*/
-				//cs.selected();
-				/*cs.load({
-					"url": "chainedField.jsp?id={index}&v={value}&t={text}"
-				}).chained(document.getElementById("province"), document.getElementById("city"))*/
-				/*var a = document.getElementById("city"),
-					b = document.getElementById("area"),
-					c = document.getElementById("c");
-				cs.load({"store": [{"id": 5, "value": "柳州", "children": [{"id": 8, "value": "柳江"}]}, {"id": 5, "value": "南宁"}, {"id": 5, "value": "桂林"}]}).chained(a, b);
-				cs.chained(a, c)*/
-				//document.getElementById("btn").onclick = function(){
-					//cs.chained(b, a);
-				//};
-				//cs.render();
 				//API tree
 				var tree = new fd.widget.SmartTree({
 					"root": {"text": "API"},
@@ -86,7 +57,7 @@
 	    				<strong>创建一个示例：</strong><br />
 	    				<script>
 	    					new fd.widget.ChainedSelector({
-								"store": "../../form/chainedField.jsp?id={value}"
+								"store": "data/{value}.json"
 							}).appendTo(document.getElementById("chain1"));
 	    				</script>
 	    			</div>
@@ -107,7 +78,7 @@
 	    				<select id="select1"></select>
 	    				<script>
 	    					new fd.widget.ChainedSelector({
-								"store": "../../form/chainedField.jsp?id={value}",
+								"store": "data/{value}.json",
 								"field": document.getElementById("select1")
 							}).appendTo(document.getElementById("chain2"));
 	    				</script>
@@ -130,7 +101,7 @@
 	    				<select id="select2"></select>
 	    				<script>
 	    					new fd.widget.ChainedSelector({
-								"store": "../../form/chainedField.jsp?id={value}",
+								"store": "data/{value}.json",
 								"field": document.getElementById("select2"),
 								"text": "--请选择--",
 								"value": -1

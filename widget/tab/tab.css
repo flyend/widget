@@ -11,9 +11,8 @@
 .x-tab-nav a{ display:block; color:#555; padding: 0 1.0em;max-width: 100px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-decoration:none;}
 .x-tab-content-panel{ display:none;} 
 .x-tab-content-panel-active{ display:block;}
-.x-tab-nav .x-tabclosable{ width:12px; height:12px; line-height:12px; position:absolute; right:1px; top:0px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-size:14px; cursor:default;}
-.x-tab-nav .x-tabclosable:hover{ color:#F00;}
-.x-tab-nav-scroller-left, .x-tab-nav-scroller-right{ width:18px; height:23px; position:absolute; top:0px;}
+.x-tab-nav .x-tab-closable{ width:12px; height:12px; line-height:12px; position:absolute; right:1px; top:0px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-size:14px; cursor:default;}
+.x-tab-nav .x-tab-closable:hover{ color:#F00;}
 /*.x-tab-nav-scroller-left{ left:0; background: transparent url("http://extjs.org.cn/extjs/resources/images/default/tabs/scroll-left.gif") no-repeat -18px 0;}
 .x-tab-nav-scroller-right{ right:0; background: transparent url("http://extjs.org.cn/extjs/resources/images/default/tabs/scroll-right.gif") no-repeat 0 0;}*/
 /*.x-tab-nav-scroller{ width:45px; height:100%; display:none;}

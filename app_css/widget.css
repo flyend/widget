@@ -8,8 +8,8 @@
 .x-tab-nav a{ display:block; color:#555; padding:0 1.12em;}
 .x-tab-content-panel{ display:none;} 
 .x-tab-content-panel-active{ display:block;}
-.x-tab-nav .x-tabclosable{ width:12px; height:12px; line-height:12px; position:absolute; right:1px; top:0px; cursor:pointer;}
-.x-tab-nav .x-tabclosable:hover{ color:#F00;}
+.x-tab-nav .x-tab-closable{ width:12px; height:12px; line-height:12px; position:absolute; right:1px; top:0px; cursor:pointer;}
+.x-tab-nav .x-tab-closable:hover{ color:#F00;}
 /*dialog*/
 .x-dialog{ position:absolute; width:553px; height:446px; display:block; border:1px solid #aaa; display:block;}
 .x-dialog, .x-dialog-message,.x-dialog-smart, .x-dialog-notice{position:absolute; border:1px solid #aaa;box-shadow: 0 0 8px rgba(0,0,0,0.2); border-radius: 5px;/*min-width: 440px;_width: 440px;*/}
