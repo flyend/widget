@@ -70,7 +70,10 @@ fd.selectAll(document).ready(function(){
 				e.preventDefault();
 			if(e.cancelBubble)
 				e.cancelBubble = true;
-			tab.addTab({"name": target.textContent || target.innerText, "panel": "data:text/html,<htm><h2>" + target.innerHTML + "</h2>", "closable": true, "actived": true});
+			if(!target.noclick){
+				target.noclick = true;
+				tab.addTab({"name": target.textContent || target.innerText, "panel": target.getAttribute("href").toString(), "closable": true, "actived": true});
+			}
 			return false;
 		}
 	});

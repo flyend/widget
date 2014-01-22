@@ -259,7 +259,7 @@
 		if(nav["closable"] === true){
 			this.setClosable(nav);
 		}
-		//console.log(this.getActivedList());
+		return this;
 		//current context this tab, addTab().bind(function(){ })// this is the nav
 	};
 	SmartTab.prototype.removeTab = function(tab, bool){
