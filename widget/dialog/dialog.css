@@ -30,13 +30,13 @@
 .x-dialog-clone-content{width: 100%;border-top: none;-moz-user-select: none;-webkit-user-select: none;position: absolute;top: 25px;left: 0;bottom: 0;z-index: 1;display: none; background:red;}
 .x-dragging .x-dialog-clone-content{ display:block;}
 .x-maximun{ overflow:hidden;}
-.x-dialog-title span a{background-image:url("../app/desk/app_images/icon.png"); background-repeat:no-repeat;width:20px;height: 18px; float: right;display: inline;}
+.x-dialog-title span a{background-image:url("http://flyend.github.io/widget/app_images/icon.png"); background-repeat:no-repeat;width:20px;height: 18px; float: right;display: inline;}
 .x-dialog-close{background-position:-62px -58px;}		
 .x-dialog-maximum{background-position:-35px -58px;}
 .x-dialog-minimum{ background-position:-8px -58px;}
 .x-dialog-footer{position:absolute; bottom:0; height:38px; padding-right:10px; background-color:#eaeaea; left:0; right:0; border-top: 1px solid #ccc; text-align: right;}
 .x-dialog-footer button{ padding:4px 15px; margin: 5px 5px 0 5px; background-color:#F3F3F3; border:1px solid #888; border-radius:3px;}
-.x-dialog-message h2{font-size:14px; margin:30px 15px 0 38px; font-weight:normal; height:35px; line-height:35px; padding-left:40px; background-image:url("../images/dialog.png"); background-repeat:no-repeat; background-position:-1px 0;}
+.x-dialog-message h2{font-size:14px; margin:30px 15px 0 38px; font-weight:normal; height:35px; line-height:35px; padding-left:40px; background-image:url("http://flyend.github.io/widget/app_images/icon.png"); background-repeat:no-repeat; background-position:-1px 0;}
 .x-dialog-message-warning h2{background-position:-1px 0;}
 .x-dialog-message-information h2{background-position:-1px -54px;}
 .x-dialog-message-warning{ width:350px; height:150px;}

@@ -4,10 +4,11 @@
 		<meta charset="utf-8" />
 		<title>二级联动</title>
 		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+		<link href="dialog.css" rel="stylesheet" />
 		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
         <script src="http://flyend.github.io/widget/widget/tree/tree.js"></script>
         <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
-        <script src="./chainedField.js"></script>
+        <script src="./dialog.src.js"></script>
         <script>
 			window.onload = function(){
 				//API tree
@@ -47,97 +48,74 @@
 	    			<h3>API DOCUMENTATION</h3>
 	    		</div>
 	    		<div class="editor">
-	    			<p>联动基于Select元素选择填充数据，store参数将获取一段数据，String类型用AJAX请求数据，Array参数类型直接解析。</p>
-	    			<p>String的<a href="#" class="param">store</a>是一段URI，返回数据类型格式如：</p>
-	    			<ol>
-	    				<li>1.data.php?id=1</li>
-	    				<li>2.data.php?id={value}&index={index}&text={text}。每次选择option时（onselect事件），将得到select的value、text、selectedIndex，此时后端需要此参数时，将替换掉参数发起AJAX请求。</li>
-	    			</ol>
-	    			<div class="demo" id="chain1">
+	    			<p>一个简单的Dialog</p>
+	    			<div class="demo">
 	    				<strong>创建一个示例：</strong><br />
+	    				<a class="demo-btn" href="javascript:void(0);" onclick="openDialog1();">open</a>
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json"
-							}).appendTo(document.getElementById("chain1"));
+	    					function openDialog1(){
+	    						new fd.widget.SimpleDialog({
+		    						"title": "示例",
+									"width": 300,
+									"height": 250,
+									"location": {"x": 100, "y": 100},
+									"content": (function(){
+										var dom = document.createElement("div");
+										dom.innerHTML = "内容";
+										return dom;
+									})()
+								});
+	    					}				
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}"
+							//创建一个简单的Dialog
+							new fd.widget.SimpleDialog({
+								"title": "示例",
+								"width": 300,
+								"height": 250,
+								"content": dom
 							});
 			            </textarea>
 			            </code>
 			        </div>
 			        <hr />
-			        <p>参数<a href="#" class="param">field</a>绑定原有的select元素，如无定义此参数，默认将创建一个select并添加到body中。</p>
-			        <div class="demo" id="chain2">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select1"></select>
+			        <!--p>参数<a href="#" class="param">field</a>绑定原有的select元素，如无定义此参数，默认将创建一个select并添加到body中。</p-->
+			        <div class="demo">
+	    				<strong>创建一个可拖动的Dialog</strong><br />
+	    				<a class="demo-btn" href="javascript:void(0);" onclick="openDialog2();">open</a></strong>
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select1")
-							}).appendTo(document.getElementById("chain2"));
+	    					function openDialog2(){
+	    						new fd.widget.SimpleDialog({
+		    						"title": "示例",
+									"width": 300,
+									"height": 250,
+									"location": {"x": 200, "y": 100},
+									"content": (function(){
+										var dom = document.createElement("div");
+										dom.innerHTML = "内容";
+										return dom;
+									})(),
+									"draggable": true,
+									"maximum": {"title": "最大化", "listener": function(){}},
+									"minimum": {"title": "最小化", "listener": function(){}},
+									"closable": {"title": "关闭", "listener": function(a, b){a.parentNode.removeChild(a);}}
+								});
+	    					}	   
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1")
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>参数<a href="#" class="param">value</a>、<a href="#" class="param">text</a>为select元素指定默认的value和text</p>
-			        <div class="demo" id="chain3">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
-	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select2"),
-								"text": "--请选择--",
-								"value": -1
-							}).appendTo(document.getElementById("chain3"));
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>函数<a href="#" class="param">appendTo([el])</a>select添加到DOM中，缺省将添加到body。</p>
-			        <div class="demo" id="chain3">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
-	    				<script>
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
+							//创建一个可拖动的Dialog
+							new fd.widget.SimpleDialog({
+								"title": "示例",
+								"width": 300,
+								"height": 250,
+								"content": dom,
+								"draggable": true
 							});
 			            </textarea>
 			            </code>
