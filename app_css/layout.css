@@ -2,21 +2,6 @@
 html, body{ height:100%; overflow:hidden;}
 body{font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:#333333;}
 body,ul,ol,p,h1,h2,h3,h4,h5{ padding:0; margin:0;}
-/**::-webkit-scrollbar {
-width:8px;
-height: 8px;
-}
-
-*::-webkit-scrollbar-thumb {
-background-color: rgba(0,0,0,0.05);
-border-radius:5px;
--webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
-}
-
-*::-webkit-scrollbar-track {
-border-radius:5px;
--webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
-}*/
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {display:block; margin:0; padding:0;}
 a{ text-decoration:none; color:#333333;}
 ul, ol{list-style:none;}
@@ -198,4 +183,4 @@ background-position: right top;
 .document-api ol{padding-left:40px; margin: 10px 15px 5px;}
 .document-api .demo{padding-left:40px; margin: 15px 0;}
 .document-api .param{text-decoration: underline; color: #428bca}
-.editor{margin-left:200px; position: absolute;top: 41px;left: 1px;bottom: 0;overflow: auto;}
+.editor{margin-left:200px; position: absolute;top: 41px;left: 1px; right:0; bottom: 0;overflow: auto;}
