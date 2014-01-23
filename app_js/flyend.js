@@ -91,6 +91,7 @@ fd.selectAll(document).ready(function(){
 					o["children"] = [];
 				var lk = {};
 				lk["text"] = link[j].innerHTML.replace(/<[^>]*>/g, "");
+				lk["value"] = link[j].getElementsByTagName("a")[0].getAttribute("href").toString();
 				o["children"].push(lk);
 			}
 		}
@@ -98,16 +99,6 @@ fd.selectAll(document).ready(function(){
 		return array;
 	}
 	var td = ditem();
-	/*new _$.widget.SimpleDialog({
-		"width": 250,
-		"height": 350,
-		"title": "Widget",
-		"content": new dx.widget.SmartTree({
-						"root": {"text": "ROOT", "value": -1},
-						"store": td
-					}).getContext(),
-		"draggable": true
-	});*/
 	//
 	new fd.util.Draggable([document.getElementById("moveTile")], {
 		/*"onStart": function(){
@@ -150,7 +141,7 @@ fd.selectAll(document).ready(function(){
 									tree.expandTo(this);
 								}
 								else{
-									tab.addTab({"name": a.textContent || a.innerText, "panel": "data:text/html,<htm><h2>" + a.innerHTML + "</h2>", "closable": true});
+									//tab.addTab({"name": a.textContent || a.innerText, "panel": a.getAttribute("href").toString(), "closable": true, "actived": true});
 								}
 							}).getContext(),
 				"draggable": true
