@@ -905,11 +905,13 @@
             while(handler.length ^ dragger.length){
                 handler.push({"target": dragger[handler.length], "element": this.dialog});
             }
+            this.dragger = {};//拖动事件者
             new fd.util.Draggable(handler).onStart(function(){
+                me.dragger["start"] && me.dragger["start"].call(this);
             }).onDrag(function(){
-
+                me.dragger["drag"] && me.dragger["drag"].call(this);
             }).onDrop(function(){
-
+                me.dragger["drop"] && me.dragger["drop"].call(this);
             });
             /*for(var i = 0; dragger.length ^ i; i++){
                 (function(arg){
@@ -935,6 +937,18 @@
             var dialog = this.dialog,
                 me = this;
         }
+    };
+    SimpleDialog.prototype.onStart = function(callback){
+        this.dragger && (this.dragger["start"] = callback);
+        return this;
+    };
+    SimpleDialog.prototype.onDrag = function(callback){
+        this.dragger && (this.dragger["drag"] = callback);
+        return this;
+    };
+    SimpleDialog.prototype.onDrop = function(callback){
+        this.dragger && (this.dragger["drop"] = callback);
+        return this;
     };
     /*
     * MessageDialog
