@@ -219,7 +219,7 @@
 	 */
 	SmartTab.prototype.addTab = function(nav){
 		var tabList = this.getTabList(),
-			tab = Tab.getInstance.call(this),
+			tab = Tab.getInstance(),
 			activeList = this.getActivedList(),
 			length,
 			self = this;
@@ -458,13 +458,15 @@
 		}
 		this.tab = tab;
 		this.panel = panel;
+		this.getContext = function(){
+			return options["tab"] || null;
+		};
 		this.getList = function(){
 			return list;
 		};
 		Tab.instance = this;
-		//console.log(this)
 	}
-	Tab.getInstance = function(options){
+	Tab.getInstance = function(){
 		//console.log(Tab.created);
 		/*if(!Tab.created){
 			Tab.created = new Tab(options);
@@ -478,7 +480,7 @@
 		return this.panel;
 	};
 	Tab.prototype.addItem = function(nav){
-		var item = nav["item"],
+		var item = nav["name"],
 			content = nav["panel"],
 			list = this.getList();
 		if(isType(nav["name"]) === "string"){
@@ -488,6 +490,9 @@
 			link.appendChild(document.createTextNode(nav["name"]));
 			item.appendChild(link);
 			this.tab.getElementsByTagName("ul")[0].appendChild(item);
+		}
+		else if(nav["name"] && nav["name"].nodeType === 1){
+
 		}
 		if(isType(nav["panel"]) === "string"){
 			content = document.createElement("div");
@@ -501,7 +506,8 @@
 			content.appendChild(frame);
 			this.panel.appendChild(content);
 		}
-		else if(nav["panel"] && nav["panel"].nodeType === 1){
+		else if(nav["panel"] && nav["panel"].nodeType === 1 && !this.getContext()){
+			//如果没有指定的tab则创建新的tab
 			content = document.createElement("div");
 			content.className = TAB_CONTENT_PANEL;
 			content.appendChild(nav["panel"]);
@@ -529,7 +535,17 @@
 		var list = this.getList(),
 			length = list.length,
 			self = this;
-		_fd.selectAll(this.getItem()).bind("click", function(){
+		_fd.selectAll(this.getItem()).bind("click", function(e){
+			var e = e || window.event,
+				target = e.target || e.srcElement;
+			if(target.tagName === "A"){
+				if(e.preventDefault)
+					e.preventDefault();
+				if(e.cancelBubble)
+					e.cancelBubble = true;
+				callback && callback.call(this, self.getContent());
+				return false;
+			}
 			callback && callback.call(this, self.getContent());
 		});
 		return this;
