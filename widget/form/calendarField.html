@@ -1,28 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
-    	<meta charset="utf-8" />
-        <title>form</title>
-        <link href="../widget.css" rel="stylesheet" />
-        <style>
-			.x-suggestion{ padding:0; margin:0; position:absolute; border:1px solid #CCC; background:#FFF; z-index:9999; display:none;}
-			.x-suggestion li{ list-style:none; height:25px; line-height:25px; padding-left:5px; cursor:default;}
-			.x-suggestion-current{ background:#DDD;}
-		</style>
-        <script src="../$.js"></script>
-        <script src="suggestionField.js"></script>
+        <meta charset="utf-8" />
+        <title>日历</title>
+        <link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+        <link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+        <link href="../calendar/calendar.css" rel="stylesheet" />
+        <script src="http://flyend.github.io/widget/widget/tree/tree.js"></script>
+        <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
+        <script src="../calendar/calendar.js"></script>
         <script>
-			_$(document).ready(function(){
-				new _$.widget.SuggestionField({
-					"field": document.getElementById("suggest"),
-					"store": ["a","abc","java","js","yahoo","javascript","android","and"," a grid","jay","jojo"]
-				});
-			});
-		</script>
+            window.onload = function(){
+                //API tree
+                var tree = new fd.widget.SmartTree({
+                    "root": {"text": "API"},
+                    "store": [
+                        {"text": "Attributes", "children": [
+                            {"text": "value"},
+                            {"text": "format"},
+                            {"text": "css"}
+                        ]},
+                        {"text": "Functions", "children": [
+                            {"text": "appendTo"},
+                            {"text": "bind"},
+                            {"text": "css"},
+                            {"text": "doClickSpace"},
+                            {"text": "draw"},
+                            {"text": "redraw"},
+                            {"text": "redate"},
+                            {"text": "setFormat"},
+                            {"text": "show"},
+                            {"text": "hide"}
+                        ]}
+                    ]
+                }).onClick(function(a, b){
+                    if(!this.isLeaf(b)){
+                        tree.expandTo(this);
+                    }
+                });
+                tree.appendTo(document.getElementById("api"));
+                dp.SyntaxHighlighter.HighlightAll('code');
+            };
+        </script>
     </head>
     <body>
-    	<form id="addForm" action="/" method="get">
-        	<input type="text" name="a" id="suggest" class="text" tabindex="1" style=" width:350px; border:1px solid #CCC; padding:5px 2px; outline:none;" />
-        </form>
+        <div class="wrapper">
+            <div class="nav">
+                <h2>Calendar Field</h2>
+            </div>
+            <div class="content document-api">
+                <div id="api">
+                    <h3>API DOCUMENTATION</h3>
+                </div>
+                <div class="editor">
+                    <p>日历</p>
+                    <div class="demo" style="position:relative;">
+                        <strong>创建一个示例：</strong><br />
+                        <input type="text" id="date" tabindex="1" style="border:1px solid #CCC; padding:5px 2px; outline:none;" />
+                        <script>
+                            document.getElementById("date").onclick = function(){
+                                var me = this;
+                                if(!this.created){
+                                    this.created = new fd.widget.Calendar().bind("click", function(format, e, self){
+                                        me.value = format;
+                                        self.hide();
+                                    }).appendTo(this.parentNode).doClickSpace(this).css({"left": "42px", "top": "49px"});
+                                }                                        
+                                else{
+                                    this.created.redate();
+                                    this.created.hide() ? this.created.hide() : this.created.show();
+                                }
+                            };
+                        </script>
+                    </div>
+                    <div class="section">
+                        <code>
+                        <textarea readonly="readonly" name="code" class="jscript">
+                            //创建一个简单的Date
+                            new fd.widget.Calendar();
+                        </textarea>
+                        </code>
+                    </div>
+                    <hr />
+                    <div class="demo">
+                        <strong>创建一个含Time的Date</strong><br />
+                        <input type="text" id="date2" tabindex="1" style="border:1px solid #CCC; padding:5px 2px; outline:none;" />
+                        <script>
+                            document.getElementById("date2").onclick = function(){
+                                var me = this;
+                                if(!this.created){
+                                    this.created = new fd.widget.Calendar({
+                                        "format": "yyyy-MM-dd hh:mm:ss"
+                                    }).bind("click", function(format, e, self){
+                                        me.value = format;
+                                        self.hide();
+                                    }).appendTo(this.parentNode).doClickSpace(this).css({"left": "42px", "top": "223px"});
+                                }                                        
+                                else{
+                                    this.created.redate();
+                                    this.created.hide() ? this.created.hide() : this.created.show();
+                                }
+                            };
+                        </script>
+                    </div>
+                    <div class="section">
+                        <code>
+                        <textarea readonly="readonly" name="code" class="jscript">
+                            new fd.widget.Calendar({
+                                "value": "2014-01-01",
+                                "format": "yyyy-MM-dd hh:mm:ss",
+                            });
+                        </textarea>
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
