@@ -23,7 +23,7 @@
                 }
             }
             return d;
-        }
+        };
         fd.fn = fd.prototype = {
             init: function(selector, context){
                 if(selector.nodeType || selector === window){
@@ -111,7 +111,7 @@
 		callback && callback.call(fd, f);
 	}
 }).call(this, function(factory){
-	return factory(window, this)
+	return factory(window, this);
 })(function(window, _fd, undefined){
 	_fd.namespace("fd.widget.SmartTab");
 	fd.widget.SmartTab = SmartTab;
@@ -196,7 +196,7 @@
 			tabList = this.getTabList(),
 			self = this;
 		if(isType(nav) === "array"){
-			var tab = Tab.getInstance.call(this, options);//new Tab(this);
+			var tab = new Tab(options);//Tab.getInstance.call(this, options);
 			if(isType(nav[0]["name"]) === "string"){
 				context.appendChild(tab.getTab());
 				context.appendChild(tab.getPanel());
@@ -208,6 +208,8 @@
 				this.addTab(nav[i]);
 			}
 		}
+		options["width"] && (context.style.width = options["width"] + "px");
+		options["height"] && (context.style.height = options["height"] + "px");
 		callback && callback.call(this);
 	};
 	/*
@@ -234,7 +236,7 @@
 			self.setActivedTab(nav);
 		});//处理后的tab和panel
 		nav["text"] = nav["name"];
-		nav["name"] = tab.getItem();
+		nav["item"] = tab.getItem();
 		nav["panel"] = tab.getContent();
 		nav["index"] = createUUID();//this.getTabLength();
 		if(tabList.length > 0){
@@ -272,7 +274,7 @@
 				var removeTab = tabList.splice(i, 1);//remove the tab
 				activeList.splice(i, 1);//长度不同出现bug
 				if(typeof bool === "undefined" || bool === true){
-					var item = removeTab[0]["name"],
+					var item = removeTab[0]["item"],
 						panel = removeTab[0]["panel"];
 					item.parentNode.removeChild(item);
 					panel.parentNode.removeChild(panel);
@@ -287,11 +289,11 @@
 			//return this;
 		}
 		if(tab["prevActive"]){
-			_fd.selectAll(tab["prevActive"]["name"]).removeClass(TAB_NAV + TAB_ACTIVE);//cancel prev actived tab
+			_fd.selectAll(tab["prevActive"]["item"]).removeClass(TAB_NAV + TAB_ACTIVE);//cancel prev actived tab
 			_fd.selectAll(tab["prevActive"]["panel"]).removeClass(TAB_CONTENT_PANEL + TAB_ACTIVE);
 			//console.log( activeList)
 		}
-		_fd.selectAll(tab["name"]).addClass(TAB_NAV + TAB_ACTIVE);
+		_fd.selectAll(tab["item"]).addClass(TAB_NAV + TAB_ACTIVE);
 		_fd.selectAll(tab["panel"]).addClass(TAB_CONTENT_PANEL + TAB_ACTIVE);
 		this.activedTab2 = tab;
 		return this;
@@ -325,11 +327,11 @@
 			}
 			var removeTab = me.removeTab(this.tab);
 			//console.log(removeTab)
-			if(!!~this.tab["name"].className.indexOf(TAB_NAV + TAB_ACTIVE)){
+			if(!!~this.tab["item"].className.indexOf(TAB_NAV + TAB_ACTIVE)){
 				me.setActivedTab(removeTab["prevActive"]);//关闭激活的tab
 			}
 		});
-		tab["name"].appendChild(closable);
+		tab["item"].appendChild(closable);
 	};
 	SmartTab.prototype.getTabLength = function(){
 		return this.getTabList().length;
@@ -343,11 +345,11 @@
 	};
 	SmartTab.prototype.onStart = function(callback){
 		var targetTab = document.createElement("div");//this.getTabList()[1]["name"].cloneNode(true);
-		targetTab.textContent = this.getTabList()[1]["name"].textContent;
+		targetTab.textContent = this.getTabList()[1]["item"].textContent;
 		targetTab.className = TAB_DRAGGING;
 		document.body.appendChild(targetTab);
 		this.draggable = new fd.util.Draggable([
-			{"element": targetTab, "target": this.getTabList()[1]["name"]},
+			{"element": targetTab, "target": this.getTabList()[1]["item"]},
 		]).onStart(function(){
 			_fd.selectAll(document.body).addClass("x-dragging");
 			callback && callback.call(this);
@@ -358,7 +360,7 @@
 		//returns element or null
 		var els = [];
 		for(var i = 0; i < this.getTabList().length; i++){
-			els[i] = this.getTabList()[i]["name"];
+			els[i] = this.getTabList()[i]["item"];
 		}
 		var distance = new fd.util.Distance(0, 0, 0, 0),
 			findNearest = function(b){
@@ -436,15 +438,15 @@
 		for(; i < length; i++){
 			tab = tabList[i];
 			(function(arg){
-				_fd.selectAll(arg["name"]).bind("click", function(){
+				_fd.selectAll(arg["item"]).bind("click", function(){
 					callback && callback.call(this, arg["panel"]);
 				});
 			})(tab);
 		}
 	};
-	function Tab(factory, options){
-		var tab = options["tab"] || document.createElement("div"),
-			panel = options["panel"] || document.createElement("div"),
+	function Tab(options){
+		var tab = document.createElement("div"),
+			panel = document.createElement("div"),
 			list = [];
 		if(!options["tab"]){
 			var item = document.createElement("ul");
@@ -459,14 +461,15 @@
 		this.getList = function(){
 			return list;
 		};
+		Tab.instance = this;
 		//console.log(this)
 	}
 	Tab.getInstance = function(options){
 		//console.log(Tab.created);
-		if(!Tab.created){
-			Tab.created = new Tab(this, options);
-		}
-		return Tab.created;
+		/*if(!Tab.created){
+			Tab.created = new Tab(options);
+		}*/
+		return Tab.instance;
 	};
 	Tab.prototype.getTab = function(){
 		return this.tab;
@@ -475,7 +478,7 @@
 		return this.panel;
 	};
 	Tab.prototype.addItem = function(nav){
-		var item = nav["name"],
+		var item = nav["item"],
 			content = nav["panel"],
 			list = this.getList();
 		if(isType(nav["name"]) === "string"){
@@ -492,10 +495,16 @@
 			var url = nav["panel"],
 				frame = document.createElement("iframe");
 			frame.src = url;
-			frame.setAttribute("frameborder","0");
+			frame.setAttribute("frameborder", "0");
 			frame.allowtransparency = "true";
-			frame.setAttribute("allowtransparency","true");
+			frame.setAttribute("allowtransparency", "true");
 			content.appendChild(frame);
+			this.panel.appendChild(content);
+		}
+		else if(nav["panel"] && nav["panel"].nodeType === 1){
+			content = document.createElement("div");
+			content.className = TAB_CONTENT_PANEL;
+			content.appendChild(nav["panel"]);
 			this.panel.appendChild(content);
 		}
 		list.push({"item": item, "content": content, "index": list.length});
