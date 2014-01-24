@@ -17,3 +17,10 @@
 .x-calendar .year.on, .x-calendar .month.on{ /*border:1px solid blue;*/}
 .x-calendar .prev, .x-calendar .next{ /*text-indent:-999em; */height:100%; padding:0 5px; }
 .x-calendar select{ width:58px; padding-top:3px; margin:0; position:absolute;}
+.x-calendar-time{font:12px/180% Arial, Helvetica, sans-serif,"宋体";}
+.x-calendar-time .x-calendar-time-hour, .x-calendar-time .x-calendar-time-minute, .x-calendar-time .x-calendar-time-second{display:inline-block; margin-left:5px; position:relative;}
+.x-calendar-time input{height:35px; width:38px; border:none; color:#ddd; font-size:26px;}
+.x-calendar-time .x-calendar-time-hour{}
+.x-calendar-time .x-calendar-time-minute{}
+.x-calendar-time .x-calendar-time-second{}
+.x-calendar-time .x-calendar-time-format{display:block; font-family: "微软雅黑";font-size: 20px;text-align: center; color:#ddd; position:absolute; top:2px; right:0px;}
