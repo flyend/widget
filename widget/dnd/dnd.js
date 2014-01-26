@@ -100,7 +100,7 @@
                 }
             }
             else
-                this.nodes.push({"element": elements, "target": element});
+                this.nodes.push({"element": elements["element"], "target": elements["target"]});
         }
         else if(isType(elements) === "nodes"){
             for(var i = 0, n = toArray(elements), l = n.length; i < l; i++){
@@ -138,7 +138,7 @@
                 status["srcY"] = e.clientY;
                 status["srcWidth"] = this.offsetLeft;
                 console.log(this)
-                status["srcHeight"] = this.offsetTop - (parseInt(_fd.css(this, "marginTop"), 10));
+                status["srcHeight"] = this.offsetTop - (parseInt(_fd.css(this, "marginTop") | 0, 10));
                 this.status = status;
                 //self.onDrag(this).onDrop(this);
                 self.handler[1] && self.handler[1].call(this);
@@ -151,6 +151,8 @@
                 (function(n){
                     n["target"].onmousedown = function(e){
                         var e = e || window.event;
+                        if(e.stopPropagation())
+                            e.stopPropagation();
                         status["target"] = this;
                         status["srcX"] = e.clientX;
                         status["srcY"] = e.clientY;
@@ -158,10 +160,12 @@
                         //console.log(this)
                         status["srcHeight"] = n["element"].offsetTop - (parseInt(_fd.css(n["element"], "marginTop"), 10));
                         n["element"].status = status;
+                        n["element"]["target"] = this;
                         //self.onDrag(this).onDrop(this);
-                        self.handler[1] && self.handler[1].call(n["element"]);
-                        self.handler[2] && self.handler[2].call(n["element"]);
-                        callback && callback.call(n["element"]);
+                        self.handler[1] && self.handler[1].call(n["element"], this);
+                        self.handler[2] && self.handler[2].call(n["element"], this);
+                        callback && callback.call(n["element"], this);
+                        return false;
                     };
                 })(node);                
             }
@@ -173,8 +177,7 @@
         return this;
     };
     Draggable.prototype.onDrag = function(callback){
-        var self = this;
-        this.handler.push(function(){
+        this.handler.push(function(target){
             var el = this;
             document.onmousemove = function(e){
                 if(el.setCapture){
@@ -186,22 +189,25 @@
                     y = e.clientY - el.status["srcY"] + el.status["srcHeight"];
                 el.style.left = x + "px";
                 el.style.top = y + "px";
-                callback && callback.call(el, e || window.event);
+                callback && callback.call(el, e || window.event, target);
+                return false;
             };
         });
         return this;
     };
     Draggable.prototype.onDrop = function(callback){
-        this.handler.push(function(){
+        this.handler.push(function(target){
             var el = this;
             document.onmouseup = function(e){
+                if(e.stopPropagation())
+                    e.stopPropagation();
                 if(el.releaseCapture){
                     el.releaseCapture();
                 }
                 document.body.onselectstart = function(){return false; };
                 document.onmousemove = null;
                 document.onmouseup = null;
-                callback && callback.call(el, e || window.event);
+                callback && callback.call(el, e || window.event, target);
             };
         });
         return this;
@@ -210,5 +216,28 @@
         //this.handler = [];
         //this.nodes = [];
 
+    };
+    /**
+     * Distance
+     */
+    _fd.namespace("fd.util.Distance");
+    fd.util.Distance = Distance;
+    function Distance(width, height, x, y){
+        this.setDistance(width, height, x, y);
+    }
+    Distance.prototype.getDistance = function(){
+        var a = this.width - this.x,
+            b = this.height - this.y;
+        return Math.sqrt(a * a + b * b);
+    };
+    Distance.prototype.setDistance = function(width, height, x, y){
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+    Distance.prototype.isCollision = function(x1, y1, w1, h1, x2, y2, w2, h2){
+        return w1 > x2 && h1 > y2 && w2 > x1 && h2 > y1;
     };
 });

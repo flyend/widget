@@ -43,8 +43,7 @@ app.mobile.events = {
 				target = e.target || e.srcElement;
 			if(!!~target.className.indexOf(opt["title"])){
 				var parent = target.parentNode;
-				!parent.show ? (fd.selectAll(parent).addClass("x-hide"), parent.show = 1) : (fd.selectAll(parent).removeClass("x-hide"), parent.show = 0); 
-				console.log(parent);	
+				!parent.show ? (fd.selectAll(parent).addClass("x-hide"), parent.show = 1) : (fd.selectAll(parent).removeClass("x-hide"), parent.show = 0);
 			}
 		});
 	};
@@ -72,7 +71,7 @@ fd.selectAll(document).ready(function(){
 				e.cancelBubble = true;
 			if(!target.noclick){
 				target.noclick = true;
-				tab.addTab({"name": target.textContent || target.innerText, "panel": target.getAttribute("href").toString(), "closable": true, "actived": true});
+				tab.addTab({"name": target.textContent || target.innerText, "panel": target.getAttribute("href").toString(), /*"closable": true,*/ "actived": true});
 			}
 			return false;
 		}
@@ -145,7 +144,11 @@ fd.selectAll(document).ready(function(){
 								}
 							}).getContext(),
 				"draggable": true
-			}).id("dialogTree");
+			}).onStart(function(){
+				document.body.className = "x-draggable";
+			}).onDrop(function(){
+				document.body.className = "";
+			}).id("dialogTree")
 			step = 0;
 		}
 	});

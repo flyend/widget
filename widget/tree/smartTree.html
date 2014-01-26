@@ -2,12 +2,18 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>二级联动</title>
+		<title>树</title>
+		<link href="http://flyend.github.io/widget/widget/tree/tree.css" rel="stylesheet" />
 		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
 		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
-        <script src="http://flyend.github.io/widget/widget/tree/tree.js"></script>
         <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
-        <script src="./chainedField.js"></script>
+        <script src="./tree.src.js"></script>
+        <style>
+        	#api .x-tree .x-tree-relation{background:none;}
+        	#api .x-tree .x-tree-child{background:none;}
+        	#api .x-tree h2{position:relative;}
+        	#api .x-tree .x-tree-leaf-child .x-tree-icon{position:absolute; top:0; left:20px;}
+        </style>
         <script>
 			window.onload = function(){
 				//API tree
@@ -15,16 +21,30 @@
 					"root": {"text": "API"},
 					"store": [
 						{"text": "Attributes", "children": [
-							{"text": "field"},
-							{"text": "store"},
-							{"text": "value"},
-							{"text": "text"},
-							{"text": "nocache"}
+							{"text": "root", "children": [{"text": "text"}]},
+							{"text": "store"}
 						]},
 						{"text": "Functions", "children": [
-							{"text": "appendTo"},
-							{"text": "load"},
-							{"text": "chained"}
+							{"text": "addTreeModelListener"},
+							{"text": "append"},
+							{"text": "getAllChildren"},
+							{"text": "getAllLeaf"},
+							{"text": "getChild"},
+							{"text": "getChildAt"},
+							{"text": "getChildCount"},
+							{"text": "getIndexOfChild"},
+							{"text": "getLeafCount"},
+							{"text": "getModel"},
+							{"text": "getNode"},
+							{"text": "getParent"},
+							{"text": "getRoot"},
+							{"text": "isLeaf"},
+							{"text": "reomveTreeModelListener"},
+							{"text": "setModel"},
+							{"text": "setRoot"},
+							{"text": "setModel"},
+							{"text": "toString"},
+							{"text": "appendTo"}
 						]}
 					]
 				}).onClick(function(a, b){
@@ -40,104 +60,42 @@
     <body>
     	<div class="wrapper">
 	    	<div class="nav">
-	    		<h2>Simple Dialog</h2>
+	    		<h2>Smart Tree</h2>
 	    	</div>
 	    	<div class="content document-api">
 	    		<div id="api">
 	    			<h3>API DOCUMENTATION</h3>
 	    		</div>
 	    		<div class="editor">
-	    			<p>联动基于Select元素选择填充数据，store参数将获取一段数据，String类型用AJAX请求数据，Array参数类型直接解析。</p>
-	    			<p>String的<a href="#" class="param">store</a>是一段URI，返回数据类型格式如：</p>
-	    			<ol>
-	    				<li>1.data.php?id=1</li>
-	    				<li>2.data.php?id={value}&index={index}&text={text}。每次选择option时（onselect事件），将得到select的value、text、selectedIndex，此时后端需要此参数时，将替换掉参数发起AJAX请求。</li>
-	    			</ol>
-	    			<div class="demo" id="chain1">
+	    			<p>创建一个简单的树</p>
+	    			<div class="demo" id="tree1">
 	    				<strong>创建一个示例：</strong><br />
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json"
-							}).appendTo(document.getElementById("chain1"));
+	    					new fd.widget.SmartTree({
+	    						"root": {"text": "API"},
+								"store": [
+									{"text": "Attributes", "children": [
+										{"text": "field"},
+										{"text": "store"},
+										{"text": "value"},
+										{"text": "text"},
+										{"text": "nocache"}
+									]},
+									{"text": "Functions", "children": [
+										{"text": "appendTo"},
+										{"text": "load"},
+										{"text": "chained"}
+									]}
+								]
+							}).appendTo(document.getElementById("tree1"));
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}"
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>参数<a href="#" class="param">field</a>绑定原有的select元素，如无定义此参数，默认将创建一个select并添加到body中。</p>
-			        <div class="demo" id="chain2">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select1"></select>
-	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select1")
-							}).appendTo(document.getElementById("chain2"));
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1")
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>参数<a href="#" class="param">value</a>、<a href="#" class="param">text</a>为select元素指定默认的value和text</p>
-			        <div class="demo" id="chain3">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
-	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select2"),
-								"text": "--请选择--",
-								"value": -1
-							}).appendTo(document.getElementById("chain3"));
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>函数<a href="#" class="param">appendTo([el])</a>select添加到DOM中，缺省将添加到body。</p>
-			        <div class="demo" id="chain3">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
-	    				<script>
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
+							new fd.widget.SmartTree({
+								"root": {"text": "API"},
+								"store": []
 							});
 			            </textarea>
 			            </code>

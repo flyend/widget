@@ -3,7 +3,7 @@
 .x-tree h2{ height:20px; font-weight:normal; font-size:13px}
 .x-tree .x-tree-relation, .x-tree .x-tree-icon{ height:20px; float:left; display:inline;}
 .x-tree .x-tree-relation{ width:20px; background-image:url("images/relation.gif"); background-position:0 -18px; -webkit-user-select:none;}
-.x-tree .x-tree-relation .x-tree-expanded{ height:12px; width:12px; display:block; margin:6px 0 0 2px; background-image:url(images/expanded-viewer.gif); background-position: -3px -24px; font-size:13px;}
+.x-tree .x-tree-relation .x-tree-expanded{ height:12px; width:12px; display:block; margin:6px 0 0 2px; background-image:url("http://flyend.github.io/widget/widget/tree/images/expanded-viewer.gif"); background-position: -3px -24px; font-size:13px;}
 .x-tree .x-tree-icon{height:20px; line-height:20px; padding-left:19px; background-image:url(images/icon-page.gif); background-repeat:no-repeat;background-position:-1px -18px;}
 .x-tree .x-tree-icon strong{ font-weight:normal; cursor:default;}
 .x-tree .x-tree-child{ margin-left:20px; background: url(images/relation.gif) -20px 0 repeat-y;}
