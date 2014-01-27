@@ -520,7 +520,6 @@
 				throw new Error("option param not empty");
 			this.tree = new Tree(options["root"] && options["root"]["text"] || "ROOT", "div");
 			_fd.fn.extend(this, this.tree);
-			console.log(this);
 			this.toString = function(){
 				return "[object SmartTree]";
 			};
