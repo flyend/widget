@@ -21,13 +21,13 @@
 	}
 	//检测lib fn // cdn
 })(function(){
-	~~(function(document){
-		var dx = (function(){
-			var dx = {};
-			dx.select = dx.selectAll = function(selector, context){
-				return new dx.fn.init(selector, context);	//return jQuery(selector)
+	~(function(callback){
+		var fd = (function(){
+			var fd = {};
+			fd.select = fd.selectAll = function(selector, context){
+				return new fd.fn.init(selector, context);	//return jQuery(selector)
 			};
-			dx.fn = dx.prototype = {
+			fd.fn = fd.prototype = {
 				init: function(selector, context){
 					//DOM handler
 					if(selector.nodeType || selector == window){
@@ -36,11 +36,48 @@
 						return this;	
 					}
 				},
+				hasClass: function(className){
+		            return this[0] && !!~this[0].className.indexOf(className);
+		        },
+		        addClass: function(className){
+		            var cls = className.split(/\s+/),
+		                i = 0,
+		                j = 0,
+		                len = this.length,
+		                element;
+		            
+		            for(; j < len; j++){
+		                element = this[j];
+		                if(element.nodeType === 1){
+		                    for(; i < cls.length; i++){
+		                        //console.log(element)
+		                        if(!this.hasClass(cls[i])){
+		                            element.className += (element.className.length ? " " : "") + cls[i];
+		                        }
+		                    }
+		                }
+		            }
+		            return this;
+		        },
+		        removeClass: function(className){
+		            var className = /\s+/.test(className) ? className.split(/\s+/) : [className],
+		                i = 0,
+		                j = 0,
+		                len = this.length,
+		                element;
+		            for(; i < className.length; i++){
+		                for(; j < len; j++){
+		                    element = this[j];
+		                    element.className = element.className.replace(new RegExp("(^|\\s+)" + className[i] + "(\\s|$)"), element.className.length ? " " : "");
+		                }   
+		            }
+		            return this;
+		        },
 				sort: [].sort,//behaves like an array
 				length: 0
 			};
-			dx.fn.init.prototype = dx.prototype;
-			dx.extend = dx.fn.extend = function(){
+			fd.fn.init.prototype = fd.prototype;
+			fd.extend = fd.fn.extend = function(){
 				var target = arguments[0] || {},
 					i = 1,
 					length = arguments.length,
@@ -63,7 +100,7 @@
 								continue;//对象已经存在
 							
 							if(deep && typeof prop[i] == "object" && target[p]){
-								dx.extend(target[p], prop[p]);	
+								fd.extend(target[p], prop[p]);	
 							}
 							else if(prop[p]){
 								target[p] = prop[p];
@@ -74,7 +111,7 @@
 				}
 				return target;
 			};
-			dx.ns = dx.namespace = function(){
+			fd.ns = fd.namespace = function(){
 				var len = arguments.length,
 					i = 0,
 					d,
@@ -88,11 +125,14 @@
 				}
 				return o;
 			};
-			return dx;
+			return fd;
 		})();
-		this["dx"] = dx;
-	}).call(this, document);
-	(function(window, document){
+		return function(f){
+			callback && callback.call(fd, f);
+		}
+	}).call(this, function(factory){
+		return factory(window, this);
+	})(function(window, _fd, undefined){
 		/**
 		 * TreeModel
 		 */
@@ -232,55 +272,8 @@
 				this.node.appendChild(child);
 				return child;
 			}
-		},// check dx.array.toArray
-		toArray = dx.array && dx.array.toArray ? dx.array.toArray : function(element){
-			var elements = [];
-			if(Object.prototype.toString.call(element) !== "[object Array]"){
-				if(element.nodeType === 1)
-					elements[0] = element;
-				else{
-					elements = Array.prototype.slice.apply(element);
-				}
-			}
-			return elements;
-		},
-		curCSS = {
-			hasClass: function(element, className){
-				return element && !!~element.className.indexOf(className);
-			},
-			addClass: function(el, className){
-				var cls = className.split(/\s+/),
-					i = 0,
-					j = 0,
-					elements = toArray(el),
-					len = elements.length,
-					element;
-				for(; i < cls.length; i++){
-					for(; j < len; j++){
-						element = elements[j];
-						if(element.nodeType === 1 && !this.hasClass(element, cls[i]))
-							element.className += (element.className.length ? " " : "") + className;	
-					}	
-				}
-			},
-			removeClass: function(el, className){
-				var className = /\s+/.test(className) ? className.split(/\s+/) : [className],
-					i = 0,
-					j = 0,
-					elements = toArray(el),
-					len = elements.length,
-					element;
-				if(className.length){
-					for(; i < className.length; i++){
-						for(; j < len; j++){
-							element = elements[j];
-							element.className = element.className.replace(new RegExp("(^|\\s+)" + className[i] + "(\\s|$)"), "");	
-						}	
-					}	
-				}
-			}
 		};
-		dx.event = {
+		_fd.event = {
 			guid: 1,
 			proxy: function(fn, proxy){
 				proxy.guid = fn.guid = fn.guid || proxy.guid || this.guid++;
@@ -307,8 +300,8 @@
 		 * Tree
 		 */
 		function Tree(name, tag){		
-			dx.extend(Tree.fn, new TreeModel());	//继承TreeModel
-			dx.extend(Tree.fn, new TreeNode());	//继承TreeNode
+			_fd.extend(Tree.fn, new TreeModel());	//继承TreeModel
+			_fd.extend(Tree.fn, new TreeNode());	//继承TreeNode
 			
 			var root = DefaultTreeNode.root(name, tag);
 			//this.children = [];
@@ -316,8 +309,8 @@
 		}
 		Tree.fn = Tree.prototype = {
 			/*init: function(){
-				dx.extend(this, new TreeModel());	//继承TreeModel
-				dx.extend(this, new TreeNode());	//继承TreeNode	
+				_fd.extend(this, new TreeModel());	//继承TreeModel
+				_fd.extend(this, new TreeNode());	//继承TreeNode	
 				return this;
 			},*/
 			children: [],
@@ -356,7 +349,7 @@
 		};
 		Tree.fn.init.prototype = Tree.fn;
 		Tree.fn.constructor = Tree;
-		dx.extend(Tree.fn, {
+		_fd.extend(Tree.fn, {
 			append: function(name, tag){
 				var child = DefaultTreeNode.root.call(this, name, tag);
 				//console.log(this.namespace);
@@ -507,8 +500,8 @@
 		};
 		*/
 		//////test
-		dx.ns("dx.widget.Tree");
-		dx.widget.Tree = Tree;
+		_fd.ns("fd.widget.Tree");
+		fd.widget.Tree = Tree;
 		/**
 		 * SmartTree
 		 */
@@ -520,47 +513,58 @@
 			TREE_EXPANDED = TREE_NAME + "-expanded",
 			TREE_NODE_ICON = TREE_NAME + "-icon",
 			TREE_HIDDEN = TREE_NAME + "-hidden";
-		dx.namespace("dx.widget.SmartTree");
-		dx.widget.SmartTree = SmartTree;
+		_fd.namespace("fd.widget.SmartTree");
+		fd.widget.SmartTree = SmartTree;
 		function SmartTree(options){
-			this.tree = new Tree(options["root"]["text"], "div");
-			dx.fn.extend(this, curCSS);
-			dx.fn.extend(this, this.tree);
-			//console.log(this);
+			if(!options)
+				throw new Error("option param not empty");
+			this.tree = new Tree(options["root"] && options["root"]["text"] || "ROOT", "div");
+			_fd.fn.extend(this, this.tree);
 			this.toString = function(){
 				return "[object SmartTree]";
 			};
-			this.make(options);
-			
+			this.getContext = function(){
+				return this.tree.getNode();
+			};			
+			SmartTree.init.call(this, options, function(){
+
+			});
+			this.appendTo();
 		}
-		SmartTree.prototype.make = function(options){
+		SmartTree.init = function(options, callback){
 			var root = this.getRoot(),
 				data = options["store"],
 				self = this;
-			root["node"].className = TREE_NAME;
+			//root["node"].className = TREE_NAME;
+			this.getContext().className = TREE_NAME;
+			//console.log(root["node"])
 			//注册根节点
 			this.addTreeModelListener(root.expand, function(){
 				var node = self.getRoot()["node"];
-				self.hasClass(node, TREE_HIDDEN) ? self.removeClass(node, TREE_HIDDEN) : self.addClass(node, TREE_HIDDEN);
+				_fd.selectAll(node).hasClass(TREE_HIDDEN) ? _fd.selectAll(node).removeClass(TREE_HIDDEN) : _fd.selectAll(node).addClass(TREE_HIDDEN);
 			});
 			if(typeof data === "string"){
 				//ajax
 			}
 			else{
 				//parse JSON([{id, pid, children}]) data
-				var index = 1, parents = [root["node"]];
+				var index = 1, parents = [];
 				(function(x, dx){
 					var len = dx.length,
 						call = arguments.callee;
-					//index++;//递归形成的数据结构
-					//console.log(x);
+					var parent = null;
+					parents.push(x["node"]);
+					//console.log(x.children, parents)
 					for(var j = 0; j < len; j++){
 						if(!dx[j])
 							return;
 						//++index;
 						var q = x.append(dx[j].text, "div"),//constructor Tree.fn.init
-							newNode = q.children.slice(1).pop();//根节点除外
-						//console.log(parents);
+							newNode = q.children.slice(1).pop(),//根节点除外
+							length = q.children.length;
+						
+						//var prevChildren = q.children[length - 1];//.push(newNode);
+						//console.log(newNode);
 						//newNode.children.push(q.getNode());
 						//未排除叶子节点
 						q.addTreeModelListener(newNode.expand, function(arg, t){
@@ -569,33 +573,37 @@
 							}
 						}(self, q));// call  stack ==> 识别不清晰
 						q.getNode().className = TREE_CHILD_NODE;
+						//newNode.parent = parents[parents.length- 1];
+						//console.log(newNode)
 						if(j == len - 1){
 							q.getNode().className = TREE_CHILD_NODE + " " + TREE_LAST_CHILD_NODE;
 						}
 						if(dx[j].children){
-							parents.push(q.getNode());//parent node
-							newNode.parent = true;
+							//parents.push(q.getNode());//parent node
+							newNode.parent = true;							
 							call(q, dx[j].children);
 						}
 						else{
-							parents.push(null);//分隔节点的深度（叶子节点）
+							//parents.push(null);//分隔节点的深度（叶子节点）
+							//parent = q.children[length - 2].node;
 							q.getNode().className = TREE_CHILD_NODE + " " + TREE_LAST_LEAF_NODE;
 							if(j == len - 1){
 								q.getNode().className = TREE_CHILD_NODE + " " + TREE_LAST_CHILD_NODE + " " + TREE_LAST_LEAF_NODE;
 							}
 						}
 						//console.log(k, newNode)
-						
 					}
+					//console.log(parents)
 				})(this.tree, data);
-				document.body.appendChild(root["node"]);
+				callback && callback.call(this);
 			}
 		};
-		SmartTree.prototype.appendTo = function(){
-			
+		SmartTree.prototype.appendTo = function(el){
+			(el || document.body).appendChild(this.getContext());
 		};
 		SmartTree.prototype.expandTo = function(q){
-			this.hasClass(q.getNode(), TREE_HIDDEN) ? this.removeClass(q.getNode(), TREE_HIDDEN) : this.addClass(q.getNode(), TREE_HIDDEN);
+			var node = q.getNode();
+			_fd.selectAll(node).hasClass(TREE_HIDDEN) ? _fd.selectAll(node).removeClass(TREE_HIDDEN) : _fd.selectAll(node).addClass(TREE_HIDDEN);
 		};
 		SmartTree.prototype.onExpand = function(callback){
 			var children = this.getAllChildren(),
@@ -627,6 +635,7 @@
 					});
 				})(children[i]);
 			}
+			return this;
 		};
 		SmartTree.prototype.tx = function(type, options){
 			return new {
@@ -635,10 +644,38 @@
 				"edit": EditTree	
 			}[type](options);
 		};
+		/**
+		 * AJAX Tree
+		 * new SmartTree().tx(type, {})
+		 * returns this instance
+		 */
+		_fd.ns("fd.widget.AjaxTree");
+		fd.widget.AjaxTree = AjaxTree;
+		function AjaxTree(options){
+			this.tree = new Tree(options["root"] && options["root"]["text"] || "ROOT", "div");
+			_fd.fn.extend(this, curCSS);
+			_fd.fn.extend(this, this.tree);
+			this.toString = function(){
+				return "[object AjaxTree]";
+			};
+			AjaxTree.init.call(this, options, function(){
+
+			});
+			console.log(this)
+		}
+		AjaxTree.init = function(){
+
+		};
+		function DnDTree(){
+
+		}
+		function EditTree(){
+			console.log(this)
+		}
 		/*(function(){
 			console.log(new Tree("isModified", "h3"));//未被修改
 		})();*/
-	})(this, document);
+	});
 	/*if (typeof define === "function" && define.amd && define.amd.jQuery) {
         define("jquery", [], function () { return jQuery; });
     }*/
