@@ -414,8 +414,8 @@
     function SmartTable(options){
         var table = options["table"] || document.createElement("table");
         _fd.selectAll(table).addClass(TABLE_NAME);
-        //_fd.extend(this, new Table(table));
-        _fd.extend(SmartTable.prototype, new Table(table));//用静态方式继承
+        _fd.extend(this, new Table(table));
+        //_fd.extend(SmartTable.prototype, new Table(table));//用静态方式继承（prototype当有多个table会覆盖）
         this.done = [];
         this.handler = [options];//初始化第一个处理
         this.toString = function(){
