@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Drag and Drop</title>
+		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+        <script src="http://flyend.github.io/widget/widget/tree/tree.src.js"></script>
+        <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
+        <script src="./dnd.js"></script>
+        <style>
+        	#dnd2 li{width:80px; height:80px; background-color:#AAA; position:absolute;}
+        </style>
+        <script>
+			window.onload = function(){
+				//API tree
+				var tree = new fd.widget.SmartTree({
+					"root": {"text": "API"},
+					"store": [
+						{"text": "Attributes", "children": [
+							{"text": "[dom]"},
+							{"text": "{target, element}"}
+						]},
+						{"text": "Functions", "children": [
+							{"text": "onStart"},
+							{"text": "onDrag"},
+							{"text": "onDrop"}
+						]}
+					]
+				}).onClick(function(a, b){
+					if(!this.isLeaf(b)){
+						tree.expandTo(this);
+					}
+				});
+				tree.appendTo(document.getElementById("api"));
+				dp.SyntaxHighlighter.HighlightAll('code');
+			};
+		</script>
+    </head>
+    <body>
+    	<div class="wrapper">
+	    	<div class="nav">
+	    		<h2>拖拽</h2>
+	    	</div>
+	    	<div class="content document-api">
+	    		<div id="api">
+	    			<h3>API DOCUMENTATION</h3>
+	    		</div>
+	    		<div class="editor">
+	    			<p>Drag and Drop</p>
+	    			<div class="demo">
+	    				<div id="dnd1" style="position:absolute;left:100px;top:100px;width:100px;height:100px;background-color:#ccc;"></div>
+	    				<strong>创建一个示例：</strong><br />
+	    				<script>
+	    					new fd.util.Draggable([document.getElementById("dnd1")]).onStart(function(){
+			                    this.style.cursor = "move";
+			                }).onDrag(function(){
+
+			                }).onDrop(function(){
+			                	this.style.cursor = "default";
+			                });
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							//创建拖动的元素
+							new fd.util.Draggable({
+								[dom]
+							}).onStart(function(){
+
+							}).onDrag(function(){
+
+							}).onDrop(function(){
+
+							});
+			            </textarea>
+			            </code>
+			        </div>
+			        <hr />
+			        <p>多个元素的拖拽</p>
+			        <div class="demo">
+			        	<ul id="dnd2">
+			        		<li style="left:60px;top:335px;"></li>
+			        		<li style="left:80px;top:325px;"></li>
+			        		<li style="left:90px;top:305px;"></li>
+			        	</ul>
+	    				<strong>创建一个示例：</strong><br />
+	    				<script>
+	    					new fd.util.Draggable(document.getElementById("dnd2").getElementsByTagName("li")).onStart(function(){
+	    						//console.log(this)
+			                }).onDrag(function(){
+
+			                }).onDrop(function(){
+			                });
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							new fd.util.Draggable({
+								document.getElementsByTagName("li")
+							}).onStart(function(){
+
+							}).onDrag(function(){
+
+							}).onDrop(function(){
+
+							});
+			            </textarea>
+			            </code>
+			        </div>
+			        <hr />
+			        <p>指定元素的拖拽</p>
+			        <div class="demo">
+	    				<strong>创建一个示例：</strong><br />
+	    				<span id="target" style="padding:10px;background-color:#ddd"></span><div id="element" style="position:absolute;width:100px;height:100px;background-color:#eee;"></div>
+	    				<script>
+	    					new fd.util.Draggable(
+	    						{"element": document.getElementById("element"), "target": document.getElementById("target")}
+	    					).onStart(function(){
+
+			                }).onDrag(function(){
+
+			                }).onDrop(function(){
+			                });
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							new fd.util.Draggable({
+								{"element": document.getElementById("element"), "target": document.getElementById("target")}
+							}).onStart(function(){
+
+							}).onDrag(function(){
+
+							}).onDrop(function(){
+
+							});
+			            </textarea>
+			            </code>
+			        </div>
+			    </div>
+		    </div>
+	    </div>
+    </body>
+</html>
