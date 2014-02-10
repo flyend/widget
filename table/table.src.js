@@ -56,7 +56,7 @@
                     }
                 }
             })(url.substr(url.indexOf("?") + 1), data);
-            console.log(parseParams(data), data, url.substr(0, url.indexOf("?")));
+            //console.log(parseParams(data), data, url.substr(0, url.indexOf("?")));
             for(var i = 0; i < xhr.length; i++){
                 try{
                     xmlhttp = xhr[i]();
@@ -67,7 +67,7 @@
                 break;
             }
             //url = url.split(/[\?|&]/)[0];
-            query = (!!~url.indexOf("?") ? (url + (data ? "&" : "") + parseParams(data)) : (url + "?" + parseParams(data)));
+            query = (!!~url.indexOf("?") ? (url + (data ? "&" : "") + parseParams(data)) : (parseParams(data) ? url + "?" + parseParams(data) : url));
             xmlhttp.open(type || "GET", /GET/i.test(type) ? query : url.split(/[\?|&]/)[0], options["async"] || true);//true 异步（默认）
             xmlhttp.setRequestHeader("If-Modified-Since", "0");
             if(/post/i.test(options["type"]))
@@ -368,7 +368,7 @@
     Table.prototype.removeAllRow = function(){
         var rowList = this.getRowList()["body"],
             body = this.body;
-        while(rowList.length){
+        while(rowList.length && body.childNodes.length){
             body.removeChild(rowList.pop()["row"]);
         }
     };
@@ -409,8 +409,7 @@
         }
     };
     /*
-     * new SmartTab({nav: [], ...})
-     * @nav array tab and panel
+     * new SmartTable()
      */
     function SmartTable(options){
         var table = options["table"] || document.createElement("table");
@@ -477,10 +476,9 @@
                     request["done"] = true;
                     request["query"] = query;
                     res = Store.getInstance().collection(res, titles);
-                    res = res.length || request["data"];
+                    res = res.length ? res : request["data"];
                     SmartTable.load.call(me, res);
                     //console.log(me.done)
-                    
                     done && done.call(me, res);
                 }
             });
@@ -516,8 +514,7 @@
                 }
             }
         }
-        //console.log(data.length);
-        for(var i = 0; i < data.length; i++){
+        for(var i = 0; i < length; i++){
             d = data[i];
             if(isType(d) === "array"){
                 this.addRow(d);//options["tpl"]
@@ -532,6 +529,7 @@
     };
     SmartTable.prototype.appendTo = function(el){
         (el || document.body).appendChild(this.getContext());
+        return this;
     };
     SmartTable.prototype.setTemplate = function(){
 
@@ -590,6 +588,11 @@
                 i,
                 j,
                 o;
+            if(!target){
+                this.store = src;
+                this.key = [];
+                return src;
+            }
             //handler target, only object
             for(i in target){
                 if(target.hasOwnProperty(i)){
@@ -609,7 +612,7 @@
                     data.push(o);
                 }
             }
-            console.log(key, data, target, src);
+            //console.log(key, data, target, src);
             this.store = data;
             this.key = key;
             return data;
