@@ -5,6 +5,7 @@
 		<title>表格</title>
 		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
 		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+		<style>table{border-collapse:collapse;} td, th{padding:4px; border:1px solid #ddd;} th{height:25px; padding:4px 8px; background-color:#eee;} table a{text-decoration:underline;}</style>
         <script src="http://flyend.github.io/widget/widget/tree/tree.src.js"></script>
         <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
         <script src="./table.src.js"></script>
@@ -15,16 +16,35 @@
 					"root": {"text": "API"},
 					"store": [
 						{"text": "Attributes", "children": [
-							{"text": "field"},
+							{"text": "table"},
+							{"text": "title", "children": [{"text": "json key...", "children": [{"text": "text"}, {"text": "tpl"}, {"text": "field"}, {"text": "attr"}]}]},
 							{"text": "store"},
-							{"text": "value"},
-							{"text": "text"},
-							{"text": "nocache"}
+							{"text": "mapping"},
+							{"text": "column"},
+							{"text": "query", "children": [{"text": "page"}, {"text": "object..."}]},
+							{"text": "nocache"},
+							{"text": "tpl", "children": [{"text": "json key & field"}]}
 						]},
 						{"text": "Functions", "children": [
+							{"text": "addCell"},
+							{"text": "addHeader"},
+							{"text": "addRow"},
 							{"text": "appendTo"},
-							{"text": "load"},
-							{"text": "chained"}
+							{"text": "getRowList"},
+							{"text": "getTableBody"},
+							{"text": "getTableFooter"},
+							{"text": "getTableHeader"},
+							{"text": "getColumn"},
+							{"text": "getContext"},							
+							{"text": "setContent"},
+							{"text": "setTableBody"},
+							{"text": "setTableFooter"},
+							{"text": "setTableHeader"},
+							{"text": "setTemplate"},
+							{"text": "ready"},
+							{"text": "reload"},
+							{"text": "reset"},
+							{"text": "removeAllRow"}
 						]}
 					]
 				}).onClick(function(a, b){
@@ -47,97 +67,135 @@
 	    			<h3>API DOCUMENTATION</h3>
 	    		</div>
 	    		<div class="editor">
-	    			<p>联动基于Select元素选择填充数据，store参数将获取一段数据，String类型用AJAX请求数据，Array参数类型直接解析。</p>
-	    			<p>String的<a href="#" class="param">store</a>是一段URI，返回数据类型格式如：</p>
-	    			<ol>
-	    				<li>1.data.php?id=1</li>
-	    				<li>2.data.php?id={value}&index={index}&text={text}。每次选择option时（onselect事件），将得到select的value、text、selectedIndex，此时后端需要此参数时，将替换掉参数发起AJAX请求。</li>
-	    			</ol>
-	    			<div class="demo" id="chain1">
+	    			<p>自定义模板的数据表格</p>
+	    			<div class="demo" id="table1">
 	    				<strong>创建一个示例：</strong><br />
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json"
-							}).appendTo(document.getElementById("chain1"));
+	    					new fd.widget.SmartTable({
+	    						"title": {
+			                        "2009": {"text": "2009"},
+			                        "2008": {"text": "2008"},
+			                        "name": {"text": "Language"},
+			                        "ratings": {"text": "Ratings 2009"},
+			                        "delta": {"text": "Delta 2008"},
+			                        "status": {"text": "Status"}
+			                    },
+								"store": "data/data.json",
+								"mapping": "data.t1"
+							}).appendTo(document.getElementById("table1"));
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}"
+							//创建一个表格
+							new fd.widget.SmartTable({
+								"title": {
+									"2009": {"text": "2009"},
+									"2008": {"text": "2008"},
+									"name": {"text": "Language"},
+									"ratings": {"text": "Ratings 2009"},
+									"delta": {"text": "Delta 2008"},
+									"status": {"text": "Status"}
+								},
+								"store": "data.json"	//[{},{}]
 							});
 			            </textarea>
 			            </code>
 			        </div>
 			        <hr />
-			        <p>参数<a href="#" class="param">field</a>绑定原有的select元素，如无定义此参数，默认将创建一个select并添加到body中。</p>
-			        <div class="demo" id="chain2">
+			        <p>重新载入数据</p>
+			        <div class="demo" id="table2">
 	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select1"></select>
+	    				<button id="reload">reload</button>
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select1")
-							}).appendTo(document.getElementById("chain2"));
+	    					var table2 = new fd.widget.SmartTable({
+	    						"title": {
+			                        "2009": {"text": "2009"},
+			                        "2008": {"text": "2008"},
+			                        "name": {"text": "Language"},
+			                        "ratings": {"text": "Ratings 2009"},
+			                        "delta": {"text": "Delta 2008"},
+			                        "status": {"text": "Status"}
+			                    },
+								"store": "data/data.json",
+								"mapping": "data.t1"
+							}).appendTo(document.getElementById("table2"));
+							document.getElementById("reload").onclick = function(){
+								table2.reset().reload({
+									"store": "data/data.json",
+									"mapping": "data.t2"
+								});
+							};
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1")
+							//重新载入数据
+							var table = new fd.widget.SmartTable({
+								"title": {
+									"2009": {"text": "2009"},
+									"2008": {"text": "2008"},
+									"name": {"text": "Language"},
+									"ratings": {"text": "Ratings 2009"},
+									"delta": {"text": "Delta 2008"},
+									"status": {"text": "Status"}
+								},
+								"store": "data.json"
 							});
+							document.getElementById("btn").onclick = function(){
+								table2.reset().reload({
+									"store": "data/data.json",
+									"mapping": "data.t2"
+								});
+							};
 			            </textarea>
 			            </code>
 			        </div>
 			        <hr />
-			        <p>参数<a href="#" class="param">value</a>、<a href="#" class="param">text</a>为select元素指定默认的value和text</p>
-			        <div class="demo" id="chain3">
+			        <p>表格模板</p>
+			        <div class="demo" id="table3">
 	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
 	    				<script>
-	    					new fd.widget.ChainedSelector({
-								"store": "data/{value}.json",
-								"field": document.getElementById("select2"),
-								"text": "--请选择--",
-								"value": -1
-							}).appendTo(document.getElementById("chain3"));
+	    					new fd.widget.SmartTable({
+	    						"title": {
+			                        "2009": {"text": "2009"},
+			                        "2008": {"text": "2008"},
+			                        "name": {"text": "Language"},
+			                        "ratings": {"text": "Ratings 2009"},
+			                        "delta": {"text": "Delta 2008"},
+			                        "status": {"text": "Status"}
+			                    },
+								"store": "data/data.json",
+								"mapping": "data.t1",
+								"tpl": {
+									"2009": "<strong>{2009}</strong>",
+									"name": "<a href='http://www.baidu.com/s?wd={name}' target='_blank'>{name}</a>",
+									"status": "<span style='color:#f00'>{status}</span>"
+								}
+							}).appendTo(document.getElementById("table3"));
 	    				</script>
 	    			</div>
 			    	<div class="section">
 			            <code>
 			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
-							});
-			            </textarea>
-			            </code>
-			        </div>
-			        <hr />
-			        <p>函数<a href="#" class="param">appendTo([el])</a>select添加到DOM中，缺省将添加到body。</p>
-			        <div class="demo" id="chain3">
-	    				<strong>创建一个示例：</strong><br />
-	    				<select id="select2"></select>
-	    				<script>
-	    				</script>
-	    			</div>
-			    	<div class="section">
-			            <code>
-			            <textarea readonly="readonly" name="code" class="jscript">
-							//创建一个多级联动
-							new fd.widget.ChainedSelector({
-								"store": "chainedField.jsp?id={value}",
-								"field": document.getElementById("select1"),
-								"text": "--请选择--",
-								"value": -1
+							//表格模板
+							new fd.widget.SmartTable({
+								"title": {
+									"2009": {"text": "2009"},
+									"2008": {"text": "2008"},
+									"name": {"text": "Language"},
+									"ratings": {"text": "Ratings 2009"},
+									"delta": {"text": "Delta 2008"},
+									"status": {"text": "Status"}
+								},
+								"store": "data.json",
+								"tpl": {
+									"2009": "<strong>{2009}</strong>",
+									"name": "<a href='http://www.baidu.com/s?wd={name}' target='_blank'>{name}</a>",
+									"status": "<span style='color:#f00'>{status}</span>"
+								}
 							});
 			            </textarea>
 			            </code>
