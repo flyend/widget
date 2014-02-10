@@ -124,23 +124,24 @@
         fd.fn.init.prototype = fd.prototype;
         return fd;
     })();
-    (typeof module != "undefined" && module.exports)
+    /*(typeof module != "undefined" && module.exports)
         ? module.exports = fd
-        : (typeof define != "undefined" ? define("fd", [], function(){ return fd; }) : this["fd"] = fd);
+        : ((typeof define === "function" && define.amd && define.amd.fd) ? define("fd", [], function(fd){ return fd; }) : this["fd"] = fd);
+    //console.log(this["fd"])*/
     return function(f){
-        callback(f);
+        callback.call(fd, f);
     }
 }).call(this, function(factory){
-    if(typeof define == "function" && define.amd){
+    if(typeof define == "function" && define.amd && define.amd.fd){
         define(["fd"], function(fd){
-            return factory(this, fd);
+            return factory(window, fd);
         });
     }
     else{
-        factory(this, this["fd"]);
+        factory(window, this);
     }
-})(function(window, fd, undefined){
-    fd.namespace("fd.widget.ChainedSelector");
+})(function(window, _fd, undefined){
+    _fd.namespace("fd.widget.ChainedSelector");
     fd.widget.ChainedSelector = ChainedSelector;
     var CHAINSELECTOR = "x-chain",
         isType = function(o){
@@ -159,7 +160,7 @@
         
         if(options["field"]){
             this.selector[0] = {
-                "context": new List(options["field"]).add().bind("change", function(){
+                "context": new List(options["field"]).add(options["text"], options["value"]).bind("change", function(){
                     options["value"] = this.value;
                     options["index"] = this.selectedIndex;
                     options["text"] = this.text;
@@ -205,7 +206,7 @@
                 selector[length - 1]["child"] = list;//设置上一级的child
                 o["parent"] = selector[length - 1]["context"];
                 selector.push(o);
-                that.appendTo(selector[0].parentNode);
+                that.appendTo(selector[0]["context"]["selector"].parentNode);
                 this.init = !0;
             }
             //有数据则重置所有子节点
@@ -432,7 +433,7 @@
             }
             return selector;
         })(selector) : document.createElement("select");
-        fd.selectAll(this.selector).addClass(CHAINSELECTOR);
+        _fd.selectAll(this.selector).addClass(CHAINSELECTOR);
         this.items = [];
         this.length = 0;
     }
@@ -489,7 +490,7 @@
         }
     };
     List.prototype.bind = function(type, callback){
-        fd.selectAll(this.selector).bind(type, function(){
+        _fd.selectAll(this.selector).bind(type, function(){
             callback && callback.call(this);
         });
         return this;

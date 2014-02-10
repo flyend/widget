@@ -7,7 +7,7 @@
 	response.addHeader("Cache-Control", "post-check=0, pre-check=0");   
 	response.setHeader("Pragma", "no-cache");
 	StringBuffer output = new StringBuffer();
-	if(request.getParameter("id").equals("1")){
+	if(request.getParameter("id").equals("-1")){
 		output.append("[");
 		output.append("{\"id\": 1, \"value\": \"北京\"},");
 		output.append("{\"id\": 21, \"value\": \"天津\"},");
@@ -47,11 +47,5 @@
 	else{
 		output.append("[]");
 	}
-	/*int[] data = {
-		1, 2, 3
-	}
-	for(int i = 0; i < data.length; i ++){
-		if(Integer.irequest.getParameter("id") == data[i])
-	}*/
 	out.println(output);
 %>
