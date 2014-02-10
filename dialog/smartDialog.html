@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>对话框</title>
+		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+		<link href="dialog.css" rel="stylesheet" />
+		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+        <script src="http://flyend.github.io/widget/widget/tree/tree.src.js"></script>
+        <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
+        <script src="./dialog.src.js"></script>
+        <script>
+			window.onload = function(){
+				//API tree
+				var tree = new fd.widget.SmartTree({
+					"root": {"text": "API"},
+					"store": [
+						{"text": "Attributes", "children": [
+							{"text": "title"},
+							{"text": "content"},
+							{"text": "width"},
+							{"text": "height"},
+							{"text": "draggable"}
+						]},
+						{"text": "Functions", "children": [
+							{"text": "appendTo"},
+							{"text": "getContext"},
+							{"text": "getHeight"},
+							{"text": "getLocation"},
+							{"text": "getWidth"},
+							{"text": "isDraggable"},
+							{"text": "isResizable"},
+							{"text": "setDraggable"},
+							{"text": "setHeight"},
+							{"text": "setLocation"},
+							{"text": "setResizable"},
+							{"text": "setSize"},
+							{"text": "setTitle"},
+							{"text": "setWidth"},
+							{"text": "show"},
+							{"text": "hide"},
+							{"text": "atCenter"}
+						]}
+					]
+				}).onClick(function(a, b){
+					if(!this.isLeaf(b)){
+						tree.expandTo(this);
+					}
+				});
+				tree.appendTo(document.getElementById("api"));
+				dp.SyntaxHighlighter.HighlightAll('code');
+			};
+		</script>
+    </head>
+    <body>
+    	<div class="wrapper">
+	    	<div class="nav">
+	    		<h2>Smart Dialog</h2>
+	    	</div>
+	    	<div class="content document-api">
+	    		<div id="api">
+	    			<h3>API DOCUMENTATION</h3>
+	    		</div>
+	    		<div class="editor">
+	    			<p>一个自定义的Dialog</p>
+	    			<div class="demo">
+	    				<strong>创建一个示例：</strong><br />
+	    				<a class="demo-btn" href="javascript:void(0);" onclick="openDialog1();">open</a>
+	    				<script>
+	    					function openDialog1(){
+	    						new fd.widget.SmartDialog({
+									"width": 442,
+									"height": 176,
+									"content": (function(){
+										var dom = document.createElement("div");
+										dom.innerHTML = "内容";
+										return dom;
+									})(),
+									"draggable": true
+								}).addButton("确定", function(){
+
+								});
+	    					}				
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							//创建一个简单的Dialog
+							new fd.widget.SmartDialog({
+								"title": "系统提示",
+								"content": dom,
+								"width": 442,
+								"height": 176,
+								"draggable": true
+							});
+			            </textarea>
+			            </code>
+			        </div>
+			        <hr />
+			    </div>
+		    </div>
+	    </div>
+    </body>
+</html>
