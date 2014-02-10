@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>选项卡</title>
+		<link href="http://flyend.github.io/widget/app_css/layout.css" rel="stylesheet" />
+		<link href="http://flyend.github.io/widget/app_css/SyntaxHighlighter.css" rel="stylesheet" />
+		<link href="./tab.css" rel="stylesheet" />
+        <script src="http://flyend.github.io/widget/widget/tree/tree.src.js"></script>
+        <script src="http://flyend.github.io/widget/app_js/SyntaxHighlighter.js"></script>
+        <script src="./tab.src.js"></script>
+        <script>
+			window.onload = function(){
+				//API tree
+				var tree = new fd.widget.SmartTree({
+					"root": {"text": "API"},
+					"store": [
+						{"text": "Attributes", "children": [
+							{"text": "nav", "children": [
+								{"text": "name"},
+								{"text": "panel"},
+								{"text": "actived"},
+								{"text": "closable"}
+							]},
+							{"text": "width"},
+							{"text": "height"}
+						]},
+						{"text": "Functions", "children": [
+							{"text": "appendTo"},
+							{"text": "addTab"},
+							{"text": "dnd"},
+							{"text": "getActivedTab"},
+							{"text": "getTabLength"},
+							{"text": "onClick"},
+							{"text": "onStart"},
+							{"text": "onDrag"},
+							{"text": "onDrop"},
+							{"text": "removeTab"},
+							{"text": "setActivedTab"},
+							{"text": "setClosable"}
+						]}
+					]
+				}).onClick(function(a, b){
+					if(!this.isLeaf(b)){
+						tree.expandTo(this);
+					}
+				});
+				tree.appendTo(document.getElementById("api"));
+				dp.SyntaxHighlighter.HighlightAll('code');
+			};
+		</script>
+    </head>
+    <body>
+    	<div class="wrapper">
+	    	<div class="nav">
+	    		<h2>Smart Tab</h2>
+	    	</div>
+	    	<div class="content document-api">
+	    		<div id="api">
+	    			<h3>API DOCUMENTATION</h3>
+	    		</div>
+	    		<div class="editor">
+	    			<p>一个简单的选项卡</p>
+	    			<div class="demo" id="tab1">
+	    				<strong>创建一个示例：</strong><br />
+	    				<script>
+	    					new fd.widget.SmartTab({
+								"nav": [
+									{"name": "选项卡一", "panel": (function(dom){ dom.innerHTML = "内容一"; return dom; })(document.createElement("div"))},
+									{"name": "选项卡二", "panel": (function(dom){ dom.innerHTML = "内容二"; return dom; })(document.createElement("h3"))},
+									{"name": "选项卡三", "panel": (function(dom){ dom.innerHTML = "内容三"; return dom; })(document.createElement("p"))}
+								],
+								"width": 450,
+								"height": 80
+							}).appendTo(document.getElementById("tab1"));
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							//创建一个选项卡
+							new fd.widget.SmartTab({
+								"nav": [
+									{"name": "选项卡一", "panel": (function(dom){ dom.innerHTML = "内容一"; return dom; })(document.createElement("div"))},
+									{"name": "选项卡二", "panel": (function(dom){ dom.innerHTML = "内容二"; return dom; })(document.createElement("h3"))},
+									{"name": "选项卡三", "panel": (function(dom){ dom.innerHTML = "内容三"; return dom; })(document.createElement("p"))}
+								]
+							});
+			            </textarea>
+			            </code>
+			        </div>
+			        <hr />
+			        <p>可添加的选项卡</p>
+			        <div class="demo" id="tab2">
+	    				<strong>创建一个示例：</strong><br />
+	    				<button onclick="addTab()">添加</button>
+	    				<script>
+	    					var tab = new fd.widget.SmartTab({
+								"nav": [
+									{"name": "选项卡一", "panel": (function(dom){ dom.innerHTML = "内容一"; return dom; })(document.createElement("div")), "actived": true}
+								]
+							}).appendTo(document.getElementById("tab2"));
+							function addTab(){
+								tab.addTab({"name": "选项卡" + tab.getTabLength(), "panel": (function(dom){ dom.innerHTML = "内容" + tab.getTabLength(); return dom; })(document.createElement("div")), "actived": true});
+							}
+	    				</script>
+	    			</div>
+			    	<div class="section">
+			            <code>
+			            <textarea readonly="readonly" name="code" class="jscript">
+							var tab = new fd.widget.ChainedSelector({
+								"nav": [
+									{"name": "选项卡一", "panel": (function(dom){ dom.innerHTML = "内容一"; return dom; })(document.createElement("div")), "actived": true}
+								]
+							});
+							tab.addTab({"name": "选项卡" + tab.getTabLength(), "panel": (function(dom){ dom.innerHTML = "内容" + tab.getTabLength(); return dom; })(document.createElement("div")), "actived": true});
+			            </textarea>
+			            </code>
+			        </div>
+			    </div>
+		    </div>
+	    </div>
+    </body>
+</html>

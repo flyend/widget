@@ -1,0 +1,20 @@
+﻿@charset "utf-8";
+.x-tab{ width:100%; margin-top:5px}
+.x-tab-nav{ /*width:100%;*/ height:30px; line-height:30px; margin:0; list-style:none; border-bottom:1px solid #ddd; overflow:hidden; position:relative;}
+.x-tab-nav ul{ padding:0; margin:0; list-style:none; position:absolute; left:0; top:0; /*width:5000px;*/}
+.x-tab-nav:after{ content:""; display:block; height:0; font-size:0; line-height:0; visibility:hidden; clear:both;}
+.x-tab-nav{zoom:1;}
+.x-tab-nav ul, .x-tab-nav-scroller{ /*float:left;*/ height: 100%;}
+.x-tab-nav ul{-webkit-transition:margin-left 500ms linear; transition:margin-left 500ms linear;}
+.x-tab-nav li{ display:inline-block; width:90px;/* margin-left:15px;*/ text-align:center; position:relative;}
+.x-tab-nav .x-tab-nav-active a{ background-color:#FFF; border-radius:4px 4px 0 0; border:1px solid #ddd; border-bottom-color:transparent; font-weight:bold;}
+.x-tab-nav a{ display:block; color:#555; padding: 0 1.0em;max-width: 100px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-decoration:none;}
+.x-tab-content-panel{ display:none;} 
+.x-tab-content-panel-active{ display:block;}
+.x-tab-nav .x-tab-closable{ width:12px; height:12px; line-height:12px; position:absolute; right:1px; top:0px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-size:14px; cursor:default;}
+.x-tab-nav .x-tab-closable:hover{ color:#F00;}
+/*.x-tab-nav-scroller-left{ left:0; background: transparent url("http://extjs.org.cn/extjs/resources/images/default/tabs/scroll-left.gif") no-repeat -18px 0;}
+.x-tab-nav-scroller-right{ right:0; background: transparent url("http://extjs.org.cn/extjs/resources/images/default/tabs/scroll-right.gif") no-repeat 0 0;}*/
+/*.x-tab-nav-scroller{ width:45px; height:100%; display:none;}
+.x-tab-nav-scroller a{width:0; height:0; line-height:0; display:inline-block; margin-left:10px; font-size:0; border-right:8px solid #ddd; border-top:6px solid transparent; border-bottom:6px solid transparent;}
+.x-tab-nav-scroller .last{border-left:8px solid #ddd; border-top:6px solid transparent; border-bottom:6px solid transparent; border-right:none;}*/
