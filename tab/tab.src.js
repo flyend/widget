@@ -285,7 +285,7 @@
 		return null;
 	};
 	SmartTab.prototype.setActivedTab = function(tab){
-		if((tab["name"] && tab["name"].nodeType !== 1 || (!tab["name"])) || !tab["panel"])
+		if(!tab["name"] || !tab["panel"])
 			return this;
 		if(this.getActivedTab() == tab){
 			//return this;
